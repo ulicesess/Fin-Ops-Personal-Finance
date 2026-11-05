@@ -1,0 +1,2679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A.R.G.O.S. // FIN-OPS — Fintech & Controle Preditivo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+        :root {
+            --color-orange: #D96234;
+            --color-olive: #333F2F;
+            --color-lavender: #706194;
+            --color-steel: #40628D;
+            --color-offwhite: #F6EFE4;
+            --color-graphite: #1E1E1E;
+            --color-graphite-panel: #2A2A2A;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(112, 97, 148, 0.35); border-radius: 9999px; }
+
+        /* PALETA DE CORES (MODO CLARO E ESCURO) */
+        body.light-mode {
+            background-color: #F6EFE4;
+            color: #1E1E1E;
+        }
+        body.light-mode .bg-panel {
+            background-color: #FFFFFF;
+            border-color: rgba(51, 63, 47, 0.12);
+        }
+        body.light-mode .bg-input {
+            background-color: #F6EFE4;
+            border-color: rgba(51, 63, 47, 0.16);
+            color: #1E1E1E;
+        }
+        body.light-mode .text-muted {
+            color: #5C5954;
+        }
+        body.light-mode .border-subtle {
+            border-color: rgba(51, 63, 47, 0.12);
+        }
+
+        body.dark-mode {
+            background-color: #1E1E1E;
+            color: #F6EFE4;
+        }
+        body.dark-mode .bg-panel {
+            background-color: #2A2A2A;
+            border-color: rgba(246, 239, 228, 0.09);
+        }
+        body.dark-mode .bg-input {
+            background-color: #1E1E1E;
+            border-color: rgba(246, 239, 228, 0.14);
+            color: #F6EFE4;
+        }
+        body.dark-mode .text-muted {
+            color: #A8A29A;
+        }
+        body.dark-mode .border-subtle {
+            border-color: rgba(246, 239, 228, 0.09);
+        }
+
+        .bg-brand-orange { background-color: #D96234; }
+        .hover-brand-orange:hover { background-color: #c25328; }
+        .text-brand-orange { color: #D96234; }
+        .border-brand-orange { border-color: #D96234; }
+
+        .bg-brand-olive { background-color: #333F2F; }
+        .text-brand-olive { color: #333F2F; }
+
+        .bg-brand-lavender { background-color: #706194; }
+        .text-brand-lavender { color: #706194; }
+
+        .bg-brand-steel { background-color: #40628D; }
+        .text-brand-steel { color: #40628D; }
+
+        /* Cartões Fintech Luxo */
+        .fintech-hero-card {
+            background: linear-gradient(135deg, #333F2F 0%, #1E1E1E 65%, #2A2A2A 100%);
+            border: 1px solid rgba(246, 239, 228, 0.12);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .fintech-hero-card::after {
+            content: '';
+            position: absolute;
+            right: -60px;
+            bottom: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(217, 98, 52, 0.30) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .physical-credit-card {
+            background: linear-gradient(135deg, #40628D 0%, #706194 55%, #1E1E1E 100%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 20px 35px -12px rgba(64, 98, 141, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .physical-credit-card::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 220px;
+            height: 220px;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(217, 98, 52, 0.35) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .physical-debit-card {
+            background: linear-gradient(135deg, #333F2F 0%, #40628D 65%, #1E1E1E 100%);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 20px 35px -12px rgba(51, 63, 47, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chip-metallic {
+            background: linear-gradient(135deg, #F6EFE4 0%, #D96234 55%, #F6EFE4 100%);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+        }
+    </style>
+</head>
+<body class="light-mode min-h-screen flex flex-col md:flex-row transition-colors duration-300 pb-28 md:pb-0">
+
+    <!-- MENU MOBILE FLUTUANTE & SIDEBAR DESKTOP -->
+    <aside id="sidebarTheme" class="fixed bottom-6 left-4 right-4 h-16 rounded-2xl shadow-xl md:rounded-none md:shadow-none md:bottom-0 md:left-0 md:right-auto md:h-screen md:w-20 md:sticky md:top-0 bg-panel border flex md:flex-col items-center justify-around md:justify-between px-2 md:px-0 md:py-6 shrink-0 z-40 transition-colors duration-300">
+        <div class="flex md:flex-col items-center w-full md:w-auto justify-around md:justify-start md:space-y-4">
+            <!-- LOGO DESKTOP -->
+            <div class="hidden md:flex w-12 h-12 rounded-2xl bg-brand-orange text-white items-center justify-center font-extrabold text-lg shadow-lg">
+                FO
+            </div>
+
+            <!-- SELETOR DE TEMA DESKTOP -->
+            <div class="hidden md:flex flex-col bg-input p-1 rounded-2xl space-y-1 border" id="themeSwitcherBg">
+                <button onclick="mudarTema('light')" id="btnLight" class="w-9 h-9 rounded-xl flex items-center justify-center transition cursor-pointer" title="Modo Claro">
+                    <i class="fa-solid fa-sun text-xs"></i>
+                </button>
+                <button onclick="mudarTema('dark')" id="btnDark" class="w-9 h-9 rounded-xl flex items-center justify-center transition cursor-pointer" title="Modo Escuro">
+                    <i class="fa-solid fa-moon text-xs"></i>
+                </button>
+            </div>
+
+            <!-- NAVEGAÇÃO PRINCIPAL -->
+            <nav class="flex md:flex-col items-center justify-around w-full md:w-auto md:space-y-1">
+                <button onclick="mudarAba('home')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer bg-[#D96234]/15 text-[#D96234]" data-tab="home" title="Início">
+                    <i class="fa-solid fa-house text-sm"></i>
+                </button>
+                <button onclick="mudarAba('entradas')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="entradas" title="Entradas">
+                    <i class="fa-solid fa-arrow-trend-up text-sm"></i>
+                </button>
+                <button onclick="mudarAba('saidas')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="saidas" title="Saídas">
+                    <i class="fa-solid fa-arrow-trend-down text-sm"></i>
+                </button>
+                <button onclick="mudarAba('caixinhas')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="caixinhas" title="Caixinhas">
+                    <i class="fa-solid fa-piggy-bank text-sm"></i>
+                </button>
+                <button onclick="mudarAba('cartoes')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="cartoes" title="Cartões">
+                    <i class="fa-solid fa-credit-card text-sm"></i>
+                </button>
+                <button onclick="mudarAba('calendario')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="calendario" title="Calendário">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </button>
+                <button onclick="mudarAba('garantias')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="garantias" title="Cofre de Garantias">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                </button>
+                <button onclick="mudarAba('previsoes')" class="nav-btn w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="previsoes" title="Chatbot Fin IA">
+                    <i class="fa-solid fa-robot text-sm"></i>
+                </button>
+                <button onclick="mudarAba('relatorios')" class="nav-btn hidden sm:flex w-9 h-9 md:w-11 md:h-11 rounded-xl items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="relatorios" title="Relatórios">
+                    <i class="fa-solid fa-chart-pie text-sm"></i>
+                </button>
+                <button onclick="mudarAba('config')" class="nav-btn flex md:hidden w-9 h-9 rounded-xl items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="config" title="Configurações">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+            </nav>
+        </div>
+
+        <div class="hidden md:flex flex-col space-y-3">
+            <button onclick="abrirModalCofreSeguranca()" class="w-11 h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" title="Cofre & Conta">
+                <i class="fa-solid fa-lock text-base"></i>
+            </button>
+            <button onclick="mudarAba('config')" class="nav-btn w-11 h-11 rounded-xl flex items-center justify-center text-muted hover:text-[#D96234] transition cursor-pointer" data-tab="config" title="Configurações">
+                <i class="fa-solid fa-gear text-base"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-grow flex flex-col min-w-0">
+
+        <!-- CABEÇALHO COM MODO FAMÍLIA & EXPORTAR PDF -->
+        <header id="headerTheme" class="h-20 border-b bg-panel px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 transition-colors duration-300">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="flex md:hidden w-10 h-10 rounded-xl bg-brand-orange text-white items-center justify-center font-extrabold text-sm shrink-0 shadow-md">
+                    FO
+                </div>
+                <div class="truncate">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight truncate">Olá, <span id="headerUserName">Investidor(a)</span></h1>
+                        <span id="badgeModoSeguranca" onclick="abrirModalCofreSeguranca()" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#333F2F] text-[#F6EFE4] cursor-pointer flex items-center gap-1 shrink-0">
+                            <i class="fa-solid fa-shield-halved text-[#D96234]"></i> <span id="badgeModoTexto">Cofre Privado</span>
+                        </span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-muted truncate flex items-center gap-1.5">
+                        <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                        <span id="syncStatusText">Sessão privada ativa</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <!-- Filtro de Modo Família -->
+                <div class="hidden sm:flex items-center bg-input border rounded-xl px-2.5 py-1.5 text-xs font-semibold gap-1.5" title="Filtrar por membro da família">
+                    <i class="fa-solid fa-users text-[#706194] text-xs"></i>
+                    <select id="selectFiltroMembro" onchange="alterarFiltroMembro(this.value)" class="bg-transparent focus:outline-none text-xs font-semibold cursor-pointer">
+                        <option value="todos">Todos os Membros</option>
+                        <option value="principal">Eu (Principal)</option>
+                        <option value="familia">Cônjuge / Família</option>
+                    </select>
+                </div>
+
+                <!-- Botão Sincronizar -->
+                <button onclick="carregarDadosServidor()" id="btnSyncHeader" class="bg-input border hover:border-[#D96234] text-xs font-semibold px-3 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer" title="Sincronizar">
+                    <i id="iconSyncHeader" class="fa-solid fa-arrows-rotate text-[#D96234]"></i>
+                    <span class="hidden lg:inline">Sincronizar</span>
+                </button>
+
+                <!-- Botão Lançar IA (Voz, Foto, Fatura ou Texto) -->
+                <button onclick="abrirModalRegistro()" class="bg-brand-orange hover-brand-orange text-white font-bold text-xs px-3.5 sm:px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span class="hidden xs:inline">Lançar IA</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTAINER DE ABAS -->
+        <div class="p-4 sm:p-8 flex-grow overflow-y-auto custom-scrollbar">
+
+            <!-- HOME PAGE (FINTECH COM BURN RATE, ANOMALIA, ZERO-SPEND DAYS E ZUMBIS) -->
+            <div id="tab-home" class="tab-content space-y-6">
+
+                <!-- BANNER DINÂMICO DE ANOMALIA FINANCEIRA (SE DETECTADO GASTO EXCESSIVO) -->
+                <div id="bannerAnomalia" class="hidden p-4 rounded-2xl bg-[#D96234]/15 border border-[#D96234]/40 flex items-start justify-between gap-3 text-xs">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-[#D96234] text-white flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <strong class="text-[#D96234] font-bold block text-sm">Alerta de Anomalia de Consumo</strong>
+                            <p id="textoAnomalia" class="text-muted mt-0.5">Identificamos gastos acima da média esperada em uma categoria.</p>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('bannerAnomalia').classList.add('hidden')" class="text-muted hover:text-[#D96234] p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- CARDS DE INOVAÇÃO: ORÇAMENTO DIÁRIO (BURN RATE) + DISCIPLINA ZERO SPEND + VALOR TOTAL DAS ASSINATURAS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 1. ORÇAMENTO DIÁRIO (BURN RATE) -->
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-muted block">Orçamento Diário</span>
+                                <h3 id="burnRateValor" class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-500 mt-1">Configure sua meta nas configurações</h3>
+                            </div>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-fire-burner"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] text-muted">
+                                <span id="burnRateDiasRestantes">Meta Mensal</span>
+                                <span id="burnRateRitmoStatus" class="font-bold text-emerald-500">Defina na aba Config</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-input rounded-full overflow-hidden">
+                                <div id="burnRateBar" class="bg-emerald-500 h-full rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. DISCIPLINA ZERO SPEND -->
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-muted block">Disciplina Zero Spend</span>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <h3 id="zeroSpendStreakDias" class="text-2xl font-extrabold font-mono text-[#D96234]">0 Dias Invictos</h3>
+                                    <span class="text-xl">🔥</span>
+                                </div>
+                            </div>
+                            <div class="w-9 h-9 rounded-xl bg-[#D96234]/15 text-[#D96234] flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                        </div>
+                        <p id="zeroSpendBadgeTexto" class="text-[11px] text-muted">Dias do mês atual (até hoje) sem nenhum registro de Despesa.</p>
+                    </div>
+
+                    <!-- 3. VALOR TOTAL DAS ASSINATURAS -->
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm flex flex-col justify-between space-y-3 cursor-pointer hover:border-[#706194] transition" onclick="mudarAba('calendario')">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-muted block">Valor Total das Assinaturas</span>
+                                <h3 id="zumbiImpactoAnual" class="text-2xl font-extrabold font-mono text-[#706194] mt-1">R$ 0,00 <span class="text-xs text-muted font-normal">/ mês</span></h3>
+                            </div>
+                            <div class="w-9 h-9 rounded-xl bg-[#706194]/15 text-[#706194] flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-repeat"></i>
+                            </div>
+                        </div>
+                        <p id="zumbiQtdTexto" class="text-[11px] text-muted truncate">0 assinaturas recorrentes (não abatem do saldo principal)</p>
+                    </div>
+                </div>
+
+                <!-- Grid Topo: Cartão de Saldo Luxo + Widget Cartão Físico -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Cartão Principal de Saldo (7 colunas) -->
+                    <div class="lg:col-span-7 fintech-hero-card rounded-3xl p-6 sm:p-8 text-[#F6EFE4] flex flex-col justify-between min-h-[240px]">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <span class="text-[11px] font-mono uppercase tracking-widest text-[#F6EFE4]/70 block">Patrimônio Líquido Disponível</span>
+                                <h2 id="homeSaldoTotal" class="text-3xl sm:text-4xl font-extrabold font-mono mt-1 tracking-tight">R$ 0,00</h2>
+                            </div>
+                            <span class="px-3 py-1 rounded-full text-[11px] font-semibold bg-[#D96234]/20 text-[#D96234] border border-[#D96234]/30 flex items-center gap-1.5">
+                                <i class="fa-solid fa-lock text-[10px]"></i> Cofre Isolado
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3 my-6 pt-4 border-t border-white/10">
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-[#F6EFE4]/60 block">Entradas</span>
+                                <p id="homeTotalEntradas" class="text-sm sm:text-lg font-bold font-mono text-emerald-400 mt-0.5">R$ 0,00</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-[#F6EFE4]/60 block">Saídas</span>
+                                <p id="homeTotalSaidas" class="text-sm sm:text-lg font-bold font-mono text-[#D96234] mt-0.5">R$ 0,00</p>
+                            </div>
+                            <div>
+                                <span class="text-[10px] uppercase tracking-wider text-[#F6EFE4]/60 block">Caixinhas</span>
+                                <p id="homeTotalCaixinhas" class="text-sm sm:text-lg font-bold font-mono text-[#F6EFE4] mt-0.5">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <!-- 6 Botões de Ação Rápida Redondos -->
+                        <div class="grid grid-cols-6 gap-2 pt-1">
+                            <button onclick="abrirModalRegistro('Despesa')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-[#D96234] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Gasto</span>
+                            </button>
+                            <button onclick="abrirModalRegistro('Receita')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[#F6EFE4] flex items-center justify-center border border-white/15 group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Receita</span>
+                            </button>
+                            <button onclick="abrirModalCaixinha('', 'aporte')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[#F6EFE4] flex items-center justify-center border border-white/15 group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-piggy-bank text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Guardar</span>
+                            </button>
+                            <button onclick="mudarAba('garantias')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-[#333F2F] text-[#F6EFE4] flex items-center justify-center border border-white/15 group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-shield-halved text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Garantias</span>
+                            </button>
+                            <button onclick="mudarAba('cartoes')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-[#F6EFE4] flex items-center justify-center border border-white/15 group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-credit-card text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Cartões</span>
+                            </button>
+                            <button onclick="mudarAba('previsoes')" class="flex flex-col items-center gap-1.5 group cursor-pointer">
+                                <div class="w-11 h-11 rounded-full bg-[#706194] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-robot text-xs"></i>
+                                </div>
+                                <span class="text-[10px] font-semibold text-[#F6EFE4]/85">Fin IA</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Widget de Cartão Físico Estilizado (5 colunas) -->
+                    <div onclick="mudarAba('cartoes')" class="lg:col-span-5 physical-credit-card rounded-3xl p-6 sm:p-8 text-white flex flex-col justify-between min-h-[240px] cursor-pointer hover:scale-[1.01] transition">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-white/75 block">FIN OPS // BLACK EDITION</span>
+                                <h3 class="text-lg font-extrabold tracking-tight mt-0.5">Cartões Consolidados</h3>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-wifi rotate-90 text-white/70 text-sm"></i>
+                                <div class="w-11 h-8 rounded-md chip-metallic"></div>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <span class="text-[11px] uppercase tracking-wider text-white/70 block">Fatura Atual (Crédito no Mês)</span>
+                            <div id="homeTotalCredito" class="text-2xl sm:text-3xl font-extrabold font-mono tracking-tight mt-1">R$ 0,00</div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-white/75">Disponível: <strong id="homeCreditoDisponivel" class="text-white">R$ 0,00</strong></span>
+                                <span id="homeCreditoPct" class="text-white/90 font-bold">0% usado</span>
+                            </div>
+                            <div class="w-full h-2 bg-black/30 rounded-full overflow-hidden">
+                                <div id="homeCreditoBar" class="bg-[#D96234] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Categorias Oficiais + Feed Recente -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm lg:col-span-1 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Gastos por Categoria Oficial</h3>
+                            <i class="fa-solid fa-chart-pie text-[#706194] text-sm"></i>
+                        </div>
+                        <div class="h-64 flex items-center justify-center my-auto relative">
+                            <canvas id="homeCategoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm lg:col-span-2 flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Transações Recentes</h3>
+                            <div class="flex items-center gap-3">
+                                <button onclick="mudarAba('entradas')" class="text-xs text-[#40628D] hover:underline font-bold cursor-pointer">Entradas</button>
+                                <button onclick="mudarAba('saidas')" class="text-xs text-[#D96234] hover:underline font-bold cursor-pointer">Ver todas →</button>
+                            </div>
+                        </div>
+                        <div id="homeRecentList" class="space-y-3 overflow-y-auto max-h-72 custom-scrollbar pr-1">
+                            <p class="text-xs text-muted text-center py-12">Nenhuma transação registrada ainda.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 'ENTRADAS' (CATEGORIAS OFICIAIS + ANALÍTICA) -->
+            <div id="tab-entradas" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#333F2F] inline-block"></span>
+                            Entradas & Receitas
+                        </h2>
+                        <p class="text-xs text-muted">Categorias: Sustento e Ofertas, Salário e Serviços, Doações, Rendimentos e Reembolsos.</p>
+                    </div>
+                    <button onclick="abrirModalRegistro('Receita')" class="bg-[#333F2F] hover:opacity-90 text-[#F6EFE4] font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-plus"></i> Nova Entrada
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-muted">Total de Receitas Acumuladas</span>
+                            <h3 id="entradasKpiTotal" class="text-3xl font-extrabold font-mono text-emerald-500 mt-2">R$ 0,00</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-subtle">
+                            <div class="bg-input p-3 rounded-xl border">
+                                <span class="text-[10px] text-muted uppercase block">Qtd. Entradas</span>
+                                <strong id="entradasKpiQtd" class="text-sm font-mono">0</strong>
+                            </div>
+                            <div class="bg-input p-3 rounded-xl border">
+                                <span class="text-[10px] text-muted uppercase block">Ticket Médio</span>
+                                <strong id="entradasKpiMedia" class="text-sm font-mono">R$ 0,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm lg:col-span-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Entradas por Categoria</h3>
+                        <div class="h-48 w-full">
+                            <canvas id="entradasChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-panel rounded-2xl border p-4 sm:p-6 shadow-sm">
+                    <div id="entradasList" class="space-y-3">
+                        <p class="text-xs text-muted text-center py-10">Nenhuma entrada registrada.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 'SAÍDAS' (CATEGORIAS OFICIAIS + ANALÍTICA) -->
+            <div id="tab-saidas" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#D96234] inline-block"></span>
+                            Saídas & Despesas
+                        </h2>
+                        <p class="text-xs text-muted">Moradia, Alimentação, Lazer e Restaurantes, Transporte, Saúde, Educação, Ministério, etc.</p>
+                    </div>
+                    <button onclick="abrirModalRegistro('Despesa')" class="bg-brand-orange hover-brand-orange text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-plus"></i> Nova Despesa
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm flex flex-col justify-between space-y-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-muted">Total de Despesas Acumuladas</span>
+                            <h3 id="saidasKpiTotal" class="text-3xl font-extrabold font-mono text-[#D96234] mt-2">R$ 0,00</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-subtle">
+                            <div class="bg-input p-3 rounded-xl border">
+                                <span class="text-[10px] text-muted uppercase block">Qtd. Saídas</span>
+                                <strong id="saidasKpiQtd" class="text-sm font-mono">0</strong>
+                            </div>
+                            <div class="bg-input p-3 rounded-xl border">
+                                <span class="text-[10px] text-muted uppercase block">Gasto Médio</span>
+                                <strong id="saidasKpiMedia" class="text-sm font-mono">R$ 0,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm lg:col-span-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Despesas por Categoria</h3>
+                        <div class="h-48 w-full">
+                            <canvas id="saidasChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-panel rounded-2xl border p-4 sm:p-6 shadow-sm">
+                    <div id="saidasList" class="space-y-3">
+                        <p class="text-xs text-muted text-center py-10">Nenhuma saída registrada.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA CAIXINHAS -->
+            <div id="tab-caixinhas" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <i class="fa-solid fa-piggy-bank text-[#D96234]"></i> Caixinhas & Reservas
+                        </h2>
+                        <p class="text-xs text-muted">Suas metas financeiras com acompanhamento em tempo real.</p>
+                    </div>
+                    <button onclick="abrirModalCaixinha('', 'aporte')" class="bg-brand-orange hover-brand-orange text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-plus"></i> Nova Meta / Aporte
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Total Guardado</span>
+                        <h3 id="caixinhasTotalAcumulado" class="text-2xl font-extrabold font-mono mt-1 text-emerald-500">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Soma das Metas</span>
+                        <h3 id="caixinhasTotalAlvo" class="text-2xl font-extrabold font-mono mt-1">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Caixinhas Ativas</span>
+                        <h3 id="caixinhasQtdAtivas" class="text-2xl font-extrabold font-mono mt-1 text-[#D96234]">0</h3>
+                    </div>
+                </div>
+
+                <div id="caixinhasGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- ABA CARTÕES (2 PAINÉIS CONSOLIDADOS + MINI CARTÕES) -->
+            <div id="tab-cartoes" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <i class="fa-solid fa-credit-card text-[#40628D]"></i> Cartões de Crédito & Débito
+                        </h2>
+                        <p class="text-xs text-muted">Soma consolidada de todos os cartões de crédito e débito + visual individual por banco.</p>
+                    </div>
+                    <button onclick="abrirModalLimite()" class="bg-[#40628D] hover:opacity-90 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-plus"></i> Cadastrar / Ajustar Cartão
+                    </button>
+                </div>
+
+                <div id="cartoesPainelConsolidado" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Seus Cartões Individuais por Banco</h3>
+                        <span id="cartoesContadorLabel" class="text-xs font-mono text-muted">0 cartões</span>
+                    </div>
+                    <div id="cartoesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+            </div>
+
+            <!-- ABA CALENDÁRIO VISUAL & BOLETOS -->
+            <div id="tab-calendario" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-[#706194]"></i> Calendário Visual & Boletos
+                        </h2>
+                        <p class="text-xs text-muted">Controle de vencimentos e contas fixas agendadas.</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-panel border rounded-xl p-1.5 shadow-sm">
+                        <button onclick="mudarMesCalendario(-1)" class="w-8 h-8 rounded-lg hover:bg-input flex items-center justify-center cursor-pointer">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                        <span id="calMesAnoLabel" class="text-xs font-bold font-mono px-3">Outubro 2026</span>
+                        <button onclick="mudarMesCalendario(1)" class="w-8 h-8 rounded-lg hover:bg-input flex items-center justify-center cursor-pointer">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-7 bg-panel rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="grid grid-cols-7 gap-1.5 text-center text-[11px] font-bold uppercase text-muted pb-2 border-b border-subtle">
+                            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+                        </div>
+                        <div id="calendarVisualGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2"></div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-panel rounded-2xl border p-6 shadow-sm space-y-3.5">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Agendar Boleto, Conta ou Assinatura</h3>
+                            <input type="text" id="calcDesc" placeholder="Descrição (Ex: Netflix, Spotify, Aluguel, Boleto)" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" step="0.01" id="calcValor" placeholder="Valor (R$)" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                                <input type="text" id="calcDia" placeholder="Ex: 05/11 ou Dia 15" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                            </div>
+                            <select id="calcFreq" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                                <option value="Boleto">📄 Boleto Data Específica</option>
+                                <option value="Mensal">🔁 Conta Fixa Mensal</option>
+                            </select>
+                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-input border cursor-pointer select-none hover:border-[#706194] transition">
+                                <input type="checkbox" id="calcAssinatura" class="w-4 h-4 accent-[#706194] rounded cursor-pointer">
+                                <div class="text-xs">
+                                    <span class="font-bold block">É uma Assinatura Recorrente?</span>
+                                    <span class="text-[10px] text-muted">Apenas visual no calendário e somada no card da Home (sem abater do saldo)</span>
+                                </div>
+                            </label>
+                            <button onclick="adicionarCompromisso()" class="w-full bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3 rounded-xl transition cursor-pointer shadow-md">
+                                Salvar no Calendário
+                            </button>
+                        </div>
+
+                        <div class="bg-panel rounded-2xl border p-6 shadow-sm flex flex-col">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-muted mb-3">Próximos Vencimentos</h3>
+                            <div id="calendarioList" class="space-y-2.5 overflow-y-auto max-h-64 custom-scrollbar pr-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOVA ABA: COFRE DE GARANTIAS (RECEIPT VAULT) -->
+            <div id="tab-garantias" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-[#D96234]"></i> Cofre de Garantias (Receipt Vault)
+                        </h2>
+                        <p class="text-xs text-muted">Prazos de garantia de eletrônicos, serviços e eletrodomésticos extraídos de fotos de notas fiscais.</p>
+                    </div>
+                    <button onclick="abrirModalRegistro('Garantia')" class="bg-brand-orange hover-brand-orange text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer shadow-md">
+                        <i class="fa-solid fa-camera"></i> Ler Nota / Cadastrar
+                    </button>
+                </div>
+
+                <div id="garantiasGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <p class="text-xs text-muted col-span-full text-center py-12">Nenhuma garantia registrada ainda.</p>
+                </div>
+            </div>
+
+            <!-- ABA 'PREVISÕES' (CHATBOT FIN IA) -->
+            <div id="tab-previsoes" class="tab-content hidden">
+                <div class="bg-panel rounded-3xl border shadow-sm flex flex-col h-[calc(100vh-11rem)] md:h-[calc(100vh-9rem)] overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-subtle flex items-center justify-between bg-[#333F2F] text-[#F6EFE4]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-[#706194] text-white flex items-center justify-center shadow-md">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-sm sm:text-base font-extrabold">Fin IA — Consultor & Assistente</h2>
+                                <p class="text-[11px] text-[#F6EFE4]/75">Diagnóstico, Burn Rate e conselhos práticos</p>
+                            </div>
+                        </div>
+                        <button onclick="gerarDiagnosticoRapidoChat()" class="bg-[#D96234] hover:opacity-90 text-white text-xs font-bold px-3 py-2 rounded-xl transition cursor-pointer shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Diagnóstico Completo
+                        </button>
+                    </div>
+
+                    <div id="chatMessagesContainer" class="flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col space-y-4">
+                        <div class="flex justify-start">
+                            <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tl-sm px-4 py-3 bg-[#706194] text-white text-xs leading-relaxed shadow-sm">
+                                <strong class="block text-[10px] uppercase tracking-wider text-white/80 mb-1">Fin IA • Assistente Preditivo</strong>
+                                Olá! Sou seu assistente do Fin Ops v6.0. Você pode falar comigo por texto ou áudio:<br>
+                                • <em>"Qual é o meu Burn Rate diário para o resto do mês?"</em><br>
+                                • <em>"Analise minhas assinaturas e gastos zumbis"</em><br>
+                                • <em>"Gastei 15 euros no lanche"</em> (converto na hora com IOF)!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 sm:p-4 border-t border-subtle bg-panel flex items-center gap-2.5">
+                        <input type="text" id="inputPerguntaIA" onkeydown="if(event.key==='Enter') enviarMensagemChatIA()" placeholder="Digite sua pergunta ou comando para o Fin IA..." class="flex-1 bg-input border rounded-2xl px-4 py-3 text-xs focus:outline-none">
+                        <button onclick="enviarMensagemChatIA()" id="btnPrevisaoIA" class="bg-brand-orange hover-brand-orange text-white font-bold text-xs px-5 py-3 rounded-2xl transition flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-md">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span class="hidden sm:inline">Enviar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA RELATÓRIOS -->
+            <div id="tab-relatorios" class="tab-content hidden space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-extrabold">Relatórios Mensais & Anuais</h2>
+                        <p class="text-xs text-muted">Painel visual de receitas, saídas e evolução patrimonial.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <select id="selectMes" onchange="atualizarRelatorios()" class="bg-input border rounded-xl px-3 py-2 text-xs font-mono focus:outline-none">
+                            <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+                            <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+                            <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+                            <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                        </select>
+                        <select id="selectAno" onchange="atualizarRelatorios()" class="bg-input border rounded-xl px-3 py-2 text-xs font-mono focus:outline-none">
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Saídas no Mês</span>
+                        <h3 id="relGastoMes" class="text-2xl font-extrabold font-mono mt-1 text-[#D96234]">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Saídas no Ano</span>
+                        <h3 id="relGastoAno" class="text-2xl font-extrabold font-mono mt-1 text-[#706194]">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-panel p-5 rounded-2xl border shadow-sm">
+                        <span class="text-xs font-bold text-muted uppercase">Balanço Líquido do Mês</span>
+                        <h3 id="relBalancoMes" class="text-2xl font-extrabold font-mono mt-1">R$ 0,00</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm">
+                        <h3 class="text-xs font-bold mb-4 uppercase tracking-wider text-muted">Evolução Mensal no Ano</h3>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="anoBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-panel p-6 rounded-2xl border shadow-sm">
+                        <h3 class="text-xs font-bold mb-4 uppercase tracking-wider text-muted">Despesas por Categoria no Mês</h3>
+                        <div class="h-64 flex items-center justify-center">
+                            <canvas id="mesDoughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA CONFIGURAÇÕES & COFRE -->
+            <div id="tab-config" class="tab-content hidden space-y-6 max-w-2xl">
+                <div>
+                    <h2 class="text-xl font-extrabold flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-[#D96234]"></i> Segurança, Privacidade & Conexão
+                    </h2>
+                    <p class="text-xs text-muted">Seu cofre financeiro pessoal é 100% isolado. Nenhuma planilha fica exposta a terceiros.</p>
+                </div>
+
+                <div class="bg-panel rounded-2xl border p-6 shadow-sm space-y-4">
+                    <div class="p-4 rounded-xl bg-[#333F2F] text-[#F6EFE4] text-xs space-y-1.5">
+                        <div class="font-extrabold flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-lock text-[#D96234]"></i> Isolamento Total Ativo
+                        </div>
+                        <p class="text-[#F6EFE4]/80 leading-relaxed">
+                            Suas chaves e planilhas ficam salvas <strong>exclusivamente neste aparelho</strong>. Seus amigos acessam contas zeradas e privadas.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-muted mb-1.5">Seu Nome / Membro</label>
+                            <input type="text" id="configUserName" placeholder="Ex: Ulisses" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-muted mb-1.5">Meta Mensal de Gastos (R$)</label>
+                            <input type="number" step="0.01" id="configMetaMensal" placeholder="Ex: 3500.00" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-muted mb-1.5">PIN de Proteção (4 a 8 dígitos)</label>
+                            <input type="password" maxlength="8" id="configVaultPin" placeholder="Opcional" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-muted mb-1.5">URL do SEU Google Apps Script (WEBAPP_URL)</label>
+                        <input type="password" id="configWebAppUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-muted mb-1.5">Chave Gemini IA (Opcional)</label>
+                        <input type="password" id="configApiKey" placeholder="AIzaSy..." class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button onclick="salvarConfiguracoes()" class="flex-1 bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer shadow-md">
+                            <i class="fa-solid fa-check mr-1"></i> Salvar e Sincronizar
+                        </button>
+                        <button onclick="desconectarCofreAtual()" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white font-bold text-xs px-4 py-3.5 rounded-xl transition cursor-pointer">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Desconectar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL DE LANÇAMENTO INTELIGENTE (ÁUDIO AO VIVO + FOTO + PDF FATURA EM LOTE + TEXTO) -->
+    <div id="modalRegistro" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-panel border rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 relative">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-[#D96234] flex items-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> Terminal de Captura IA (Voz, Foto, PDF ou Texto)
+                </h3>
+                <button onclick="fecharModalRegistro()" class="text-muted hover:text-red-500 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Botão de Gravação de Áudio ao Vivo -->
+            <div class="flex items-center justify-between p-3 rounded-2xl bg-input border">
+                <div class="flex items-center gap-2.5">
+                    <button type="button" id="btnGravarVoz" onclick="alternarGravacaoVoz()" class="w-10 h-10 rounded-full bg-[#D96234] hover:bg-[#c25328] text-white flex items-center justify-center transition cursor-pointer shadow-md">
+                        <i id="iconeMicrofone" class="fa-solid fa-microphone text-sm"></i>
+                    </button>
+                    <div>
+                        <span id="textoStatusAudio" class="text-xs font-bold block">Gravar Áudio</span>
+                        <span id="tempoAudio" class="text-[10px] text-muted font-mono">Clique para falar sua despesa</span>
+                    </div>
+                </div>
+                <span id="badgeAudioPronto" class="hidden text-[11px] font-mono text-emerald-500 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg">Áudio Capturado ✅</span>
+            </div>
+
+            <textarea id="modalPromptInput" rows="3" placeholder="Ou digite naturalmente (ex: 'Uber 25 no pix', '15 euros no lanche no cartão', 'Comprei fone bluetooth 250 com 12 meses de garantia')..." class="w-full bg-input border rounded-2xl p-3.5 text-xs focus:outline-none resize-none"></textarea>
+
+            <!-- Seletor de Arquivos (Fotos ou PDF de Fatura em Lote) -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <label class="bg-input hover:opacity-80 text-xs font-semibold px-3.5 py-2.5 rounded-xl cursor-pointer transition flex items-center gap-2 border">
+                    <i class="fa-solid fa-file-invoice text-[#D96234]"></i> Foto ou PDF (Fatura C6/Nubank)
+                    <input type="file" id="modalFileInput" accept="image/*,application/pdf" class="hidden" onchange="handleModalFile(event)">
+                </label>
+                <span id="modalFileIndicator" class="text-xs text-emerald-500 font-mono hidden truncate max-w-[200px]">Arquivo anexado ✅</span>
+            </div>
+
+            <div id="modalFeedbackMsg" class="hidden text-xs font-mono p-3 rounded-xl border"></div>
+
+            <button onclick="processarRegistroIA()" id="btnModalProcessar" class="w-full bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer flex items-center justify-center gap-2 shadow-md">
+                <i class="fa-solid fa-paper-plane"></i> Processar e Sincronizar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CAIXINHA -->
+    <div id="modalCaixinha" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-panel border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 relative">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-[#D96234] flex items-center gap-2">
+                    <i class="fa-solid fa-piggy-bank"></i> Caixinha & Meta
+                </h3>
+                <button onclick="fecharModalCaixinha()" class="text-muted hover:text-red-500 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-muted mb-1">Nome da Caixinha</label>
+                    <input type="text" id="inputCaixinhaMeta" placeholder="Ex: Viagem / Reserva de Emergência" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Operação</label>
+                        <select id="selectCaixinhaOperacao" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                            <option value="aporte">➕ Guardar (Aporte)</option>
+                            <option value="resgate">➖ Retirar (Resgate)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Valor (R$)</label>
+                        <input type="number" step="0.01" id="inputCaixinhaValor" placeholder="200.00" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Meta Alvo (R$)</label>
+                        <input type="number" step="0.01" id="inputCaixinhaAlvo" placeholder="5000.00" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Prazo</label>
+                        <input type="text" id="inputCaixinhaPrazo" placeholder="Ex: Dez/2026" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                    </div>
+                </div>
+            </div>
+            <button onclick="confirmarMovimentacaoCaixinha()" id="btnConfirmarCaixinha" class="w-full bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer">
+                Salvar Caixinha
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE CARTÕES -->
+    <div id="modalLimiteCartao" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-panel border rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 relative">
+            <div class="flex justify-between items-center">
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-[#40628D] flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card"></i> Cadastrar ou Ajustar Cartão
+                </h3>
+                <button onclick="fecharModalLimite()" class="text-muted hover:text-red-500 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-muted mb-1">Nome do Banco / Cartão</label>
+                    <input type="text" id="inputNomeCartao" placeholder="Ex: Nubank, C6 Bank, Inter, Itaú..." class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-muted mb-1">Modalidade</label>
+                    <select id="selectTipoCartao" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                        <option value="Cartão de Crédito">💳 Cartão de Crédito (Limite Mensal)</option>
+                        <option value="Cartão de Débito">🏦 Cartão de Débito / Conta (Saldo)</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Limite Total ou Saldo (R$)</label>
+                        <input type="number" step="0.01" id="inputNovoLimiteValor" placeholder="Ex: 5000.00" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-muted mb-1">Fechamento</label>
+                        <input type="text" id="inputFechamentoCartao" placeholder="Ex: Dia 10" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                    </div>
+                </div>
+            </div>
+            <button onclick="confirmarNovoLimite()" id="btnConfirmarLimite" class="w-full bg-[#40628D] hover:opacity-90 text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer">
+                Salvar Cartão
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE COFRE / PRIMEIRO ACESSO -->
+    <div id="modalCofreSeguranca" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-panel border rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5 relative">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-[#333F2F] text-[#F6EFE4] flex items-center justify-center font-bold shadow-md">
+                        <i class="fa-solid fa-shield-halved text-[#D96234] text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-extrabold">Cofre Pessoal Fin Ops</h3>
+                        <p class="text-xs text-muted">Isolamento total de dados entre amigos e dispositivos</p>
+                    </div>
+                </div>
+                <button id="btnFecharCofreModal" onclick="fecharModalCofreSeguranca()" class="text-muted hover:text-[#D96234] cursor-pointer hidden">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 p-1.5 bg-input rounded-2xl border">
+                <button type="button" id="tabCofreLocalBtn" onclick="selecionarModoCofreModal('local')" class="py-2.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer bg-[#D96234] text-white">
+                    <i class="fa-solid fa-mobile-screen mr-1"></i> Criar Conta Isolada
+                </button>
+                <button type="button" id="tabCofreNuvemBtn" onclick="selecionarModoCofreModal('nuvem')" class="py-2.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer text-muted">
+                    <i class="fa-solid fa-cloud mr-1"></i> Conectar Minha Planilha
+                </button>
+            </div>
+
+            <div class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-muted mb-1">Seu Nome / Membro</label>
+                    <input type="text" id="cofreInputNome" placeholder="Ex: Ulisses" class="w-full bg-input border rounded-xl p-3 text-xs focus:outline-none">
+                </div>
+
+                <div id="blocoCofreNuvem" class="hidden space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-muted mb-1">URL do SEU Google Apps Script (WEBAPP_URL)</label>
+                        <input type="password" id="cofreInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-muted mb-1">Chave Gemini IA (Opcional)</label>
+                        <input type="password" id="cofreInputGemini" placeholder="AIzaSy..." class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                    </div>
+                </div>
+
+                <div id="blocoCofreLocalInfo" class="p-3.5 rounded-xl bg-input border text-xs text-muted leading-relaxed">
+                    <strong class="text-[#D96234] block mb-0.5"><i class="fa-solid fa-circle-check mr-1"></i> Modo Padrão para Amigos:</strong>
+                    Conta limpa e privada salva no aparelho, sem misturar dados com outras pessoas.
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-muted mb-1">PIN de Proteção (Opcional)</label>
+                    <input type="password" maxlength="8" id="cofreInputPin" placeholder="Ex: 1234" class="w-full bg-input border rounded-xl p-3 text-xs font-mono focus:outline-none">
+                </div>
+            </div>
+
+            <button onclick="confirmarAcessoCofre()" class="w-full bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer shadow-lg">
+                <i class="fa-solid fa-unlock-keyhole mr-1.5"></i> Acessar Meu Cofre
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE PIN -->
+    <div id="modalDesbloqueioPin" class="fixed inset-0 bg-[#1E1E1E] z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#2A2A2A] border border-white/10 rounded-3xl max-w-sm w-full p-8 text-center space-y-5 text-[#F6EFE4] shadow-2xl">
+            <div class="w-14 h-14 rounded-2xl bg-[#D96234]/20 text-[#D96234] flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-extrabold">Cofre Protegido</h3>
+                <p class="text-xs text-[#F6EFE4]/70 mt-1">Digite seu PIN para desbloquear o Fin Ops.</p>
+            </div>
+            <input type="password" id="inputUnlockPin" onkeydown="if(event.key==='Enter') validarPinDesbloqueio()" placeholder="••••" class="w-full bg-[#1E1E1E] border border-white/15 rounded-2xl p-3.5 text-center text-lg font-mono tracking-widest text-white focus:outline-none">
+            <p id="erroUnlockPin" class="text-xs text-red-400 hidden">PIN incorreto. Tente novamente.</p>
+            <div class="space-y-2">
+                <button onclick="validarPinDesbloqueio()" class="w-full bg-brand-orange hover-brand-orange text-white font-bold text-xs py-3.5 rounded-xl transition cursor-pointer">
+                    Desbloquear
+                </button>
+                <button onclick="desconectarCofreAtual()" class="w-full text-[11px] text-[#F6EFE4]/60 hover:text-white py-2 cursor-pointer">
+                    Entrar com outra conta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        const DEFAULT_WEBAPP_URL = '';
+
+        (function sanitizarSegurancaV2() {
+            const ok = localStorage.getItem('argos_vault_v2_confirmed');
+            if (!ok) {
+                localStorage.removeItem('argos_webapp_url');
+                localStorage.removeItem('finops_webapp_url');
+            }
+        })();
+
+        // Categorias Oficiais
+        const CATEGORIAS_RECEITA = [
+            'Sustento e Ofertas',
+            'Salário e Serviços',
+            'Doações e Presentes',
+            'Rendimentos',
+            'Reembolsos'
+        ];
+
+        const CATEGORIAS_DESPESA = [
+            'Moradia',
+            'Alimentação',
+            'Lazer e Restaurantes',
+            'Transporte',
+            'Saúde',
+            'Educação',
+            'Ministério e Doações',
+            'Cuidados Pessoais',
+            'Imprevistos e Taxas'
+        ];
+
+        // Estado Global
+        let transacoes = [];
+        let contasCartoes = [];
+        let caixinhas = [];
+        let compromissos = [];
+        let garantias = [];
+        let filtroMembroAtual = 'todos';
+        let modoCofreModal = 'local';
+
+        // Gráficos
+        let homeChartInstance = null;
+        let entradasChartInstance = null;
+        let saidasChartInstance = null;
+        let anoChartInstance = null;
+        let mesChartInstance = null;
+
+        // Mídia & Áudio
+        let modalFileBase64 = null;
+        let modalFileMime = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let gravandoAudio = false;
+        let audioGravadoBase64 = null;
+        let audioTimerInterval = null;
+
+        let temaAtual = localStorage.getItem('argos_tema') || 'light';
+        let calDataRef = new Date();
+        let calMesAtual = calDataRef.getMonth();
+        let calAnoAtual = calDataRef.getFullYear();
+
+        function obterPerfilCofreId() {
+            const nome = (localStorage.getItem('argos_user_name') || 'padrao').toLowerCase().replace(/[^a-z0-9]/g, '_');
+            return 'finops_vault_' + nome;
+        }
+
+        function obterWebAppUrl() {
+            const el = document.getElementById('configWebAppUrl');
+            const v = el ? el.value.trim() : '';
+            return (v || localStorage.getItem('argos_webapp_url') || DEFAULT_WEBAPP_URL).trim();
+        }
+
+        function estaEmModoNuvem() {
+            return obterWebAppUrl().startsWith('https://script.google.com');
+        }
+
+        function salvarBancoLocal() {
+            const chave = obterPerfilCofreId();
+            localStorage.setItem(chave, JSON.stringify({ transacoes, contasCartoes, caixinhas, compromissos, garantias }));
+        }
+
+        function carregarBancoLocal() {
+            try {
+                const b = localStorage.getItem(obterPerfilCofreId());
+                if (b) {
+                    const p = JSON.parse(b);
+                    transacoes = p.transacoes || [];
+                    contasCartoes = p.contasCartoes || [];
+                    caixinhas = p.caixinhas || [];
+                    compromissos = p.compromissos || [];
+                    garantias = p.garantias || [];
+                } else {
+                    transacoes = []; contasCartoes = []; caixinhas = []; compromissos = []; garantias = [];
+                }
+            } catch (e) {
+                transacoes = []; contasCartoes = []; caixinhas = []; compromissos = []; garantias = [];
+            }
+        }
+
+        // ============================================================================
+        // CAPTURA DE ÁUDIO AO VIVO NO NAVEGADOR (Web Audio API / MediaRecorder)
+        // ============================================================================
+        async function alternarGravacaoVoz() {
+            const btn = document.getElementById('btnGravarVoz');
+            const icon = document.getElementById('iconeMicrofone');
+            const statusTexto = document.getElementById('textoStatusAudio');
+            const tempoTexto = document.getElementById('tempoAudio');
+            const badgePronto = document.getElementById('badgeAudioPronto');
+
+            if (!gravandoAudio) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            audioGravadoBase64 = reader.result.split(',')[1];
+                            badgePronto.classList.remove('hidden');
+                        };
+                        reader.readAsDataURL(audioBlob);
+                    };
+
+                    mediaRecorder.start();
+                    gravandoAudio = true;
+                    btn.classList.add('animate-pulse', 'bg-red-600');
+                    icon.className = 'fa-solid fa-stop text-sm';
+                    statusTexto.innerText = 'Gravando...';
+                    let seg = 0;
+                    audioTimerInterval = setInterval(() => {
+                        seg++;
+                        tempoTexto.innerText = 'Gravando: 00:' + String(seg).padStart(2, '0');
+                    }, 1000);
+                } catch (err) {
+                    alert('Permissão de microfone negada ou não suportada no seu navegador.');
+                }
+            } else {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+                }
+                clearInterval(audioTimerInterval);
+                gravandoAudio = false;
+                btn.classList.remove('animate-pulse', 'bg-red-600');
+                icon.className = 'fa-solid fa-microphone text-sm';
+                statusTexto.innerText = 'Áudio Gravado!';
+                tempoTexto.innerText = 'Pronto para enviar com IA';
+            }
+        }
+
+        function handleModalFile(event) {
+            const file = event.target.files[0];
+            const indicator = document.getElementById('modalFileIndicator');
+            if (file) {
+                modalFileMime = file.type || (file.name.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    modalFileBase64 = reader.result.split(',')[1];
+                    indicator.innerText = (file.name.endsWith('.pdf') ? '📄 PDF Fatura: ' : '📸 Foto: ') + file.name;
+                    indicator.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ============================================================================
+        // 1. CARREGAR E SINCRONIZAR DADOS DO SERVIDOR (OU COFRE LOCAL)
+        // ============================================================================
+        async function carregarDadosServidor() {
+            const url = obterWebAppUrl();
+            const iconSync = document.getElementById('iconSyncHeader');
+            const statusText = document.getElementById('syncStatusText');
+
+            atualizarBadgeSeguranca();
+
+            if (!url || !url.startsWith('https://script.google.com')) {
+                carregarBancoLocal();
+                atualizarTudo();
+                return;
+            }
+
+            if (iconSync) iconSync.classList.add('animate-spin');
+            if (statusText) statusText.innerText = 'Sincronizando com sua planilha...';
+
+            try {
+                const response = await fetch(url, { method: 'GET', redirect: 'follow' });
+                const dados = await response.json();
+
+                if (dados && dados.status === 'ok') {
+                    transacoes = Array.isArray(dados.Transacoes)
+                        ? dados.Transacoes.map((item, idx) => {
+                            const vals = Object.values(item);
+                            return {
+                                id: item.ID || item.id || vals[0] || ('TX-' + idx),
+                                data: formatarDataPlanilha(item.Data || item.data || vals[1]),
+                                tipo: normalizarTipo(item.Tipo || item.tipo || vals[2]),
+                                categoria: item.Categoria || item.categoria || vals[3] || 'Alimentação',
+                                descricao: item['Descrição'] || item.Descricao || item.descricao || vals[4] || 'Lançamento',
+                                valor: parsearValorBR(item.Valor !== undefined ? item.Valor : vals[5]),
+                                pagamento: item['Método'] || item.Metodo || item.metodo || vals[6] || 'PIX',
+                                status: item.Status || item.status || vals[7] || 'Confirmado',
+                                membro: item.Membro || item.membro || vals[8] || 'Principal'
+                            };
+                        }).filter(t => t.valor > 0).reverse()
+                        : [];
+
+                    contasCartoes = Array.isArray(dados.Contas_Cartoes)
+                        ? dados.Contas_Cartoes.map(c => {
+                            const vals = Object.values(c);
+                            return {
+                                nome_conta: c.Nome_Conta || c.nome_conta || vals[0] || 'Cartão Principal',
+                                tipo: c.Tipo || c.tipo || vals[1] || 'Cartão de Crédito',
+                                limite_total: parsearValorBR(c.Limite_Total !== undefined ? c.Limite_Total : vals[2]),
+                                saldo_atual: parsearValorBR(c.Saldo_Atual !== undefined ? c.Saldo_Atual : vals[3]),
+                                fechamento: String(c.Fechamento || c.fechamento || vals[4] || 'Dia 10')
+                            };
+                        }).filter(c => Boolean(c.nome_conta))
+                        : [];
+
+                    caixinhas = Array.isArray(dados.Caixinhas)
+                        ? dados.Caixinhas.map((cx, i) => {
+                            const vals = Object.values(cx);
+                            const nome = cx.Nome_Meta || cx.nome_meta || vals[0] || ('Meta ' + (i + 1));
+                            const alvo = parsearValorBR(cx.Valor_Alvo !== undefined ? cx.Valor_Alvo : vals[1]);
+                            const saldo = parsearValorBR(cx.Saldo_Atual !== undefined ? cx.Saldo_Atual : vals[2]);
+                            const prazo = cx.Prazo || cx.prazo || vals[3] || 'Sem prazo';
+                            return {
+                                nome_meta: String(nome).trim(),
+                                valor_alvo: alvo > 0 ? alvo : (saldo > 0 ? saldo * 2 : 1000),
+                                saldo_atual: saldo,
+                                prazo: String(prazo).includes('T') ? formatarDataPlanilha(prazo) : String(prazo)
+                            };
+                        }).filter(c => Boolean(c.nome_meta))
+                        : [];
+
+                    compromissos = Array.isArray(dados.Recorrentes)
+                        ? dados.Recorrentes.map(r => {
+                            const vals = Object.values(r);
+                            const freqStr = String(r['Frequência'] || r.Frequencia || r.frequencia || vals[3] || 'Boleto');
+                            const descStr = String(r['Descrição'] || r.Descricao || r.desc || vals[0] || 'Conta');
+                            const ehAssinatura = Boolean(r.assinatura) || freqStr.toLowerCase().includes('assinatura');
+                            return {
+                                desc: descStr,
+                                valor: parsearValorBR(r.Valor !== undefined ? r.Valor : vals[1]),
+                                dia: r.Dia_Vencimento || r.dia || vals[2] || 'Dia 10',
+                                frequencia: freqStr,
+                                assinatura: ehAssinatura
+                            };
+                        }).filter(r => r.valor > 0 || Boolean(r.desc))
+                        : [];
+
+                    garantias = Array.isArray(dados.Garantias)
+                        ? dados.Garantias.map((g, i) => {
+                            const vals = Object.values(g);
+                            return {
+                                produto: g.Produto || g.produto || vals[0] || ('Equipamento ' + (i + 1)),
+                                loja: g.Loja || g.loja || vals[1] || 'Loja',
+                                data_compra: g.Data_Compra || g.data_compra || vals[2] || 'Recente',
+                                prazo: g.Prazo_Garantia || g.prazo || vals[3] || '12 meses',
+                                vencimento: g.Vencimento || g.vencimento || vals[4] || '',
+                                status: g.Status || g.status || vals[5] || 'Vigente',
+                                valor: parsearValorBR(g.Valor !== undefined ? g.Valor : vals[6])
+                            };
+                        }).filter(g => Boolean(g.produto))
+                        : [];
+
+                    if (statusText) {
+                        const h = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                        statusText.innerText = 'Sincronizado às ' + h;
+                    }
+
+                    atualizarTudo();
+                }
+            } catch (err) {
+                console.error(err);
+                if (statusText) statusText.innerText = 'Modo Local / Verifique WEBAPP_URL';
+            } finally {
+                if (iconSync) iconSync.classList.remove('animate-spin');
+            }
+        }
+
+        async function enviarPostServidor(payloadObj) {
+            const url = obterWebAppUrl();
+            if (!url || !url.startsWith('https://script.google.com')) {
+                salvarBancoLocal();
+                return;
+            }
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payloadObj)
+            });
+        }
+
+        function parsearValorBR(val) {
+            if (typeof val === 'number') return isNaN(val) ? 0 : val;
+            if (val === null || val === undefined) return 0;
+            let s = String(val).replace(/[R$\s]/g, '').trim();
+            if (!s) return 0;
+            if (s.includes(',') && s.includes('.')) s = s.replace(/\./g, '').replace(',', '.');
+            else if (s.includes(',')) s = s.replace(',', '.');
+            const n = parseFloat(s);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function formatarDataPlanilha(valorData) {
+            if (!valorData) return new Date().toLocaleDateString('pt-BR');
+            const str = String(valorData).trim();
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return str;
+            const m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (m) return m[3] + '/' + m[2] + '/' + m[1];
+            const dt = new Date(str);
+            return isNaN(dt.getTime()) ? str : dt.toLocaleDateString('pt-BR');
+        }
+
+        function normalizarTipo(tStr) {
+            const t = String(tStr || '').toLowerCase().trim();
+            return (t === 'receita' || t === 'entrada') ? 'Receita' : 'Despesa';
+        }
+
+        function formatarMoedaBR(valor) {
+            return (Number(valor) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function alterarFiltroMembro(val) {
+            filtroMembroAtual = val;
+            atualizarTudo();
+        }
+
+        // ============================================================================
+        // 2. RENDERIZAÇÃO COMPLETA: BURN RATE, ANOMALIA, ZERO-SPEND, ASSINATURAS E GRÁFICOS
+        // ============================================================================
+        function atualizarTudo() {
+            const txFiltradas = transacoes.filter(t => {
+                if (filtroMembroAtual === 'todos') return true;
+                const mNorm = String(t.membro || '').toLowerCase();
+                if (filtroMembroAtual === 'principal') return mNorm === 'principal' || mNorm === 'ulisses' || mNorm === 'eu' || !mNorm;
+                return mNorm.indexOf('familia') !== -1 || mNorm.indexOf('esposa') !== -1 || mNorm.indexOf('conjuge') !== -1;
+            });
+
+            let total = 0, entradas = 0, saidas = 0, saidasMesAtual = 0, creditoMes = 0;
+            const homeList = document.getElementById('homeRecentList');
+            const entradasList = document.getElementById('entradasList');
+            const saidasList = document.getElementById('saidasList');
+
+            if (homeList) homeList.innerHTML = '';
+            if (entradasList) entradasList.innerHTML = '';
+            if (saidasList) saidasList.innerHTML = '';
+
+            const catsSaida = {};
+            const catsEntrada = {};
+            let countEntradas = 0;
+            let countSaidas = 0;
+
+            const mesAtual = String(new Date().getMonth() + 1).padStart(2, '0');
+            const anoAtual = String(new Date().getFullYear());
+
+            txFiltradas.forEach((t, idx) => {
+                const val = Number(t.valor) || 0;
+                const metodoNorm = String(t.pagamento || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                const ehDebito = metodoNorm.includes('debito');
+                const ehCartaoCredito = !ehDebito && (metodoNorm.includes('cartao') || metodoNorm.includes('credito'));
+
+                const htmlItem = `
+                    <div class="flex items-center justify-between bg-input p-3.5 rounded-2xl border text-xs hover:border-[#D96234]/40 transition">
+                        <div class="flex items-center gap-3 min-w-0 pr-3">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${t.tipo === 'Receita' ? 'bg-[#333F2F] text-[#F6EFE4]' : 'bg-[#D96234]/15 text-[#D96234]'}">
+                                <i class="fa-solid ${t.tipo === 'Receita' ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down'}"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="font-bold block truncate">${t.descricao}</span>
+                                <span class="text-[11px] text-muted">${t.data} • <strong class="text-brand-orange">${t.categoria}</strong> • ${t.pagamento || 'PIX'} ${t.membro ? ' • ' + t.membro : ''}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="font-mono font-bold ${t.tipo === 'Receita' ? 'text-emerald-500' : 'text-[#D96234]'}">
+                                ${t.tipo === 'Receita' ? '+' : '-'} R$ ${formatarMoedaBR(val)}
+                            </span>
+                            <button onclick="removerTransacaoServidor('${String(t.id || t.descricao).replace(/'/g, "\\'")}', ${idx})" class="text-muted hover:text-red-500 transition cursor-pointer p-1" title="Excluir">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if (t.tipo === 'Receita') {
+                    entradas += val;
+                    total += val;
+                    catsEntrada[t.categoria || 'Salário e Serviços'] = (catsEntrada[t.categoria || 'Salário e Serviços'] || 0) + val;
+                    if (entradasList) entradasList.innerHTML += htmlItem;
+                    countEntradas++;
+                } else {
+                    saidas += val;
+                    total -= val;
+                    const partesData = String(t.data || '').split('/');
+                    const ehMesCorrente = (partesData.length === 3 && partesData[1] === mesAtual && partesData[2] === anoAtual) || partesData.length !== 3;
+                    if (ehMesCorrente) {
+                        saidasMesAtual += val;
+                        if (ehCartaoCredito) creditoMes += val;
+                    }
+                    catsSaida[t.categoria || 'Alimentação'] = (catsSaida[t.categoria || 'Alimentação'] || 0) + val;
+                    if (saidasList) saidasList.innerHTML += htmlItem;
+                    countSaidas++;
+                }
+
+                if (idx < 6 && homeList) homeList.innerHTML += htmlItem;
+            });
+
+            if (txFiltradas.length === 0 && homeList) {
+                homeList.innerHTML = '<p class="text-xs text-muted text-center py-12">Nenhuma transação registrada ainda.</p>';
+            }
+
+            const somaCaixinhas = (caixinhas || []).reduce((acc, c) => acc + (Number(c.saldo_atual) || 0), 0);
+
+            document.getElementById('homeSaldoTotal').innerText = 'R$ ' + formatarMoedaBR(total);
+            document.getElementById('homeTotalEntradas').innerText = 'R$ ' + formatarMoedaBR(entradas);
+            document.getElementById('homeTotalSaidas').innerText = 'R$ ' + formatarMoedaBR(saidas);
+            document.getElementById('homeTotalCaixinhas').innerText = 'R$ ' + formatarMoedaBR(somaCaixinhas);
+
+            // KPIs Entradas e Saídas
+            const entTotalEl = document.getElementById('entradasKpiTotal');
+            if (entTotalEl) {
+                entTotalEl.innerText = 'R$ ' + formatarMoedaBR(entradas);
+                document.getElementById('entradasKpiQtd').innerText = String(countEntradas);
+                document.getElementById('entradasKpiMedia').innerText = 'R$ ' + formatarMoedaBR(countEntradas > 0 ? entradas / countEntradas : 0);
+            }
+            const saiTotalEl = document.getElementById('saidasKpiTotal');
+            if (saiTotalEl) {
+                saiTotalEl.innerText = 'R$ ' + formatarMoedaBR(saidas);
+                document.getElementById('saidasKpiQtd').innerText = String(countSaidas);
+                document.getElementById('saidasKpiMedia').innerText = 'R$ ' + formatarMoedaBR(countSaidas > 0 ? saidas / countSaidas : 0);
+            }
+
+            // 1. CÁLCULO DO ORÇAMENTO DIÁRIO DINÂMICO (BURN RATE COM META MENSAL)
+            calcularBurnRate(saidasMesAtual);
+
+            // 2. MODO ANOMALIA FINANCEIRA
+            detectarAnomaliaFinanceira(catsSaida, saidas);
+
+            // 3. DISCIPLINA ZERO SPEND (DIAS INVICTOS NO MÊS ATUAL)
+            calcularZeroSpendStreak(txFiltradas);
+
+            // 4. VALOR TOTAL DAS ASSINATURAS RECORRENTES
+            detectarAssinaturasZumbis();
+
+            // Gráficos e Abas
+            renderHomeChart(catsSaida);
+            renderEntradasSaidasCharts(catsEntrada, catsSaida);
+            renderCaixinhas();
+            renderCartoes(creditoMes);
+            renderCalendario();
+            renderGarantias();
+        }
+
+        // ============================================================================
+        // RECURSOS AVANÇADOS: BURN RATE, ANOMALIA, ZERO-SPEND E ASSINATURAS
+        // ============================================================================
+        function calcularBurnRate(saidasMesAtual) {
+            const hoje = new Date();
+            const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+            const diaAtual = hoje.getDate();
+            const diasRestantes = Math.max(1, ultimoDia - diaAtual);
+
+            const metaSalva = parseFloat(localStorage.getItem('argos_meta_mensal') || localStorage.getItem('finops_meta_mensal') || '0') || 0;
+
+            const elValor = document.getElementById('burnRateValor');
+            const elDias = document.getElementById('burnRateDiasRestantes');
+            const elStatus = document.getElementById('burnRateRitmoStatus');
+            const elBar = document.getElementById('burnRateBar');
+
+            if (!metaSalva || metaSalva <= 0) {
+                if (elValor) {
+                    elValor.className = 'text-sm sm:text-base font-bold text-[#D96234] mt-1 leading-snug';
+                    elValor.innerText = 'Configure sua meta nas configurações';
+                }
+                if (elDias) elDias.innerText = 'Meta Mensal: R$ 0,00';
+                if (elStatus) {
+                    elStatus.innerText = 'Configurar Meta';
+                    elStatus.className = 'font-bold text-muted cursor-pointer underline';
+                    elStatus.onclick = () => mudarAba('config');
+                }
+                if (elBar) {
+                    elBar.style.width = '0%';
+                    elBar.className = 'bg-emerald-500 h-full rounded-full';
+                }
+                return;
+            }
+
+            const saldoRestanteMeta = metaSalva - saidasMesAtual;
+            const orcamentoDiario = saldoRestanteMeta / diasRestantes;
+            const pctConsumido = Math.min(100, Math.max(0, (saidasMesAtual / metaSalva) * 100));
+
+            if (elValor) {
+                elValor.className = 'text-2xl font-extrabold font-mono mt-1 ' + (orcamentoDiario >= 0 ? 'text-emerald-500' : 'text-red-500');
+                elValor.innerHTML = 'R$ ' + formatarMoedaBR(Math.max(0, orcamentoDiario)) + ' <span class="text-xs text-muted font-normal">/ dia</span>';
+            }
+            if (elDias) {
+                elDias.innerText = 'Faltam ' + diasRestantes + ' dias • Meta R$ ' + formatarMoedaBR(metaSalva);
+            }
+
+            if (saldoRestanteMeta > 0 && pctConsumido < 75) {
+                if (elStatus) { elStatus.innerText = 'Dentro da Meta'; elStatus.className = 'font-bold text-emerald-500'; elStatus.onclick = null; }
+                if (elBar) { elBar.style.width = pctConsumido.toFixed(0) + '%'; elBar.className = 'bg-emerald-500 h-full rounded-full'; }
+            } else if (saldoRestanteMeta > 0) {
+                if (elStatus) { elStatus.innerText = 'Atenção ao Limite'; elStatus.className = 'font-bold text-[#D96234]'; elStatus.onclick = null; }
+                if (elBar) { elBar.style.width = pctConsumido.toFixed(0) + '%'; elBar.className = 'bg-[#D96234] h-full rounded-full'; }
+            } else {
+                if (elStatus) { elStatus.innerText = 'Meta Excedida'; elStatus.className = 'font-bold text-red-500'; elStatus.onclick = null; }
+                if (elBar) { elBar.style.width = '100%'; elBar.className = 'bg-red-500 h-full rounded-full'; }
+            }
+        }
+
+        function detectarAnomaliaFinanceira(catsSaida, totalSaidas) {
+            const banner = document.getElementById('bannerAnomalia');
+            const texto = document.getElementById('textoAnomalia');
+            if (!banner || !texto) return;
+
+            if (totalSaidas <= 100) {
+                banner.classList.add('hidden');
+                return;
+            }
+
+            let maiorCat = '';
+            let maiorValor = 0;
+            Object.keys(catsSaida).forEach(cat => {
+                if (catsSaida[cat] > maiorValor) {
+                    maiorValor = catsSaida[cat];
+                    maiorCat = cat;
+                }
+            });
+
+            const pct = (maiorValor / totalSaidas) * 100;
+            // Se uma categoria consome mais de 35% do orçamento total e for categoria não-fixa ou delivery
+            if (pct >= 35 && maiorValor > 200) {
+                banner.classList.remove('hidden');
+                texto.innerText = 'Atenção: ' + maiorCat + ' já consumiu R$ ' + formatarMoedaBR(maiorValor) + ' (' + pct.toFixed(0) + '% de todas as despesas do mês). Considere pausar novos gastos nesta categoria.';
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        function calcularZeroSpendStreak(listaTx) {
+            const elDias = document.getElementById('zeroSpendStreakDias');
+            const elBadge = document.getElementById('zeroSpendBadgeTexto');
+            if (!elDias) return;
+
+            const hoje = new Date();
+            const diaHoje = hoje.getDate();
+            const mesAtualStr = String(hoje.getMonth() + 1).padStart(2, '0');
+            const anoAtualStr = String(hoje.getFullYear());
+
+            const diasComDespesa = new Set();
+
+            (listaTx || []).forEach(t => {
+                if (t.tipo !== 'Despesa') return;
+                const dataStr = String(t.data || '').trim();
+                const partesBR = dataStr.split('/');
+                if (partesBR.length === 3) {
+                    const d = parseInt(partesBR[0], 10);
+                    const m = partesBR[1].padStart(2, '0');
+                    const a = partesBR[2];
+                    if (m === mesAtualStr && a === anoAtualStr && d >= 1 && d <= diaHoje) {
+                        diasComDespesa.add(d);
+                    }
+                } else {
+                    const partesISO = dataStr.split('-');
+                    if (partesISO.length === 3) {
+                        const a = partesISO[0];
+                        const m = partesISO[1].padStart(2, '0');
+                        const d = parseInt(partesISO[2], 10);
+                        if (m === mesAtualStr && a === anoAtualStr && d >= 1 && d <= diaHoje) {
+                            diasComDespesa.add(d);
+                        }
+                    }
+                }
+            });
+
+            let diasInvictos = 0;
+            for (let d = 1; d <= diaHoje; d++) {
+                if (!diasComDespesa.has(d)) {
+                    diasInvictos++;
+                }
+            }
+
+            const hojeTemDespesa = diasComDespesa.has(diaHoje);
+            elDias.innerText = diasInvictos + (diasInvictos === 1 ? ' Dia Invicto' : ' Dias Invictos');
+
+            if (elBadge) {
+                if (hojeTemDespesa) {
+                    elBadge.innerText = 'Hoje houve registro de despesa (hoje não conta como Zero Spend).';
+                } else {
+                    elBadge.innerText = 'De 1 até hoje (dia ' + diaHoje + '), ' + diasInvictos + ' dia(s) sem nenhuma Despesa!';
+                }
+            }
+        }
+
+        function detectarAssinaturasZumbis() {
+            const impactoEl = document.getElementById('zumbiImpactoAnual');
+            const qtdEl = document.getElementById('zumbiQtdTexto');
+            if (!impactoEl) return;
+
+            const assinaturas = compromissos.filter(r => {
+                const freqNorm = String(r.frequencia || '').toLowerCase();
+                const d = (r.desc || '').toLowerCase();
+                return Boolean(r.assinatura) || freqNorm.includes('assinatura') || /\b(netflix|spotify|prime|amazon|disney|youtube|apple|icloud|academia|globo|hbo|chatgpt|openai|cursor|deezer)\b/.test(d);
+            });
+
+            let somaMensal = 0;
+            assinaturas.forEach(a => { somaMensal += Number(a.valor) || 0; });
+
+            impactoEl.innerHTML = 'R$ ' + formatarMoedaBR(somaMensal) + ' <span class="text-xs text-muted font-normal">/ mês</span>';
+            if (qtdEl) {
+                qtdEl.innerText = assinaturas.length + ' assinatura(s) recorrente(s) ativa(s) • Somente visual no calendário';
+            }
+        }
+
+        // ============================================================================
+        // COFRE DE GARANTIAS (RECEIPT VAULT)
+        // ============================================================================
+        function renderGarantias() {
+            const grid = document.getElementById('garantiasGrid');
+            if (!grid) return;
+
+            if (garantias.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-panel border rounded-2xl p-10 text-center space-y-3">
+                        <i class="fa-solid fa-shield-halved text-3xl text-[#D96234]"></i>
+                        <p class="text-sm font-bold">Cofre de Garantias Vazio</p>
+                        <p class="text-xs text-muted">Tire fotos de notas fiscais de eletrodomésticos e eletrônicos para registrar suas garantias automaticamente.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+            garantias.forEach((g, idx) => {
+                grid.innerHTML += `
+                    <div class="bg-panel border rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-3 hover:border-[#D96234] transition">
+                        <div class="flex items-start justify-between gap-2">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-emerald-500 bg-emerald-500/10 px-2.5 py-0.5 rounded-md">${g.status || 'Vigente'}</span>
+                                <h3 class="text-base font-extrabold mt-1">${g.produto}</h3>
+                                <span class="text-xs text-muted font-mono">${g.loja} • Comprado: ${g.data_compra}</span>
+                            </div>
+                            <button onclick="removerGarantia(${idx})" class="text-muted hover:text-red-500 p-1 cursor-pointer">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                        <div class="p-3 bg-input rounded-xl border text-xs font-mono space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-muted">Prazo:</span>
+                                <strong>${g.prazo}</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted">Vencimento:</span>
+                                <strong class="text-[#D96234]">${g.vencimento || '12 meses'}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function removerGarantia(idx) {
+            garantias.splice(idx, 1);
+            salvarBancoLocal();
+            renderGarantias();
+        }
+
+        // ============================================================================
+        // GRÁFICOS ANALÍTICOS DE ENTRADAS E SAÍDAS POR CATEGORIA OFICIAL
+        // ============================================================================
+        function renderEntradasSaidasCharts(catsEntrada, catsSaida) {
+            const palette = ['#D96234', '#333F2F', '#706194', '#40628D', '#10b981', '#f59e0b', '#ec4899', '#6366f1', '#14b8a6'];
+
+            const ctxIn = document.getElementById('entradasChartCanvas');
+            if (ctxIn) {
+                if (entradasChartInstance) entradasChartInstance.destroy();
+                const labelsIn = Object.keys(catsEntrada);
+                const dataIn = Object.values(catsEntrada);
+                entradasChartInstance = new Chart(ctxIn.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labelsIn.length ? labelsIn : ['Sem Entradas'],
+                        datasets: [{
+                            label: 'Entradas (R$)',
+                            data: dataIn.length ? dataIn : [0],
+                            backgroundColor: '#333F2F',
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: obterCorTextoGrafico() }, grid: { color: obterCorGradeGrafico() } },
+                            x: { ticks: { color: obterCorTextoGrafico(), font: { size: 10 } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            const ctxOut = document.getElementById('saidasChartCanvas');
+            if (ctxOut) {
+                if (saidasChartInstance) saidasChartInstance.destroy();
+                const labelsOut = Object.keys(catsSaida);
+                const dataOut = Object.values(catsSaida);
+                saidasChartInstance = new Chart(ctxOut.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: labelsOut.length ? labelsOut : ['Sem Saídas'],
+                        datasets: [{
+                            label: 'Saídas (R$)',
+                            data: dataOut.length ? dataOut : [0],
+                            backgroundColor: palette,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { color: obterCorTextoGrafico() }, grid: { color: obterCorGradeGrafico() } },
+                            x: { ticks: { color: obterCorTextoGrafico(), font: { size: 10 } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ============================================================================
+        // ABA CAIXINHAS
+        // ============================================================================
+        function renderCaixinhas() {
+            const grid = document.getElementById('caixinhasGrid');
+            if (!grid) return;
+            let somaSaldo = 0, somaAlvo = 0;
+
+            if (caixinhas.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-panel border rounded-2xl p-10 text-center space-y-3">
+                        <i class="fa-solid fa-piggy-bank text-3xl text-[#D96234]"></i>
+                        <p class="text-sm font-bold">Nenhuma Caixinha criada</p>
+                        <p class="text-xs text-muted">Crie sua meta financeira clicando em "Nova Meta / Aporte".</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+            caixinhas.forEach((cx, idx) => {
+                const sld = Number(cx.saldo_atual) || 0;
+                const alv = Number(cx.valor_alvo) || 0;
+                somaSaldo += sld; somaAlvo += alv;
+                const pct = alv > 0 ? (sld / alv) * 100 : 100;
+                const esc = String(cx.nome_meta).replace(/'/g, "\\'");
+
+                grid.innerHTML += `
+                    <div class="bg-panel border rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-5 hover:border-[#D96234] transition">
+                        <div class="space-y-2">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <h3 class="text-base font-extrabold">${cx.nome_meta}</h3>
+                                    <span class="text-[11px] font-mono text-muted">Prazo: ${cx.prazo || 'Livre'}</span>
+                                </div>
+                                <button onclick="excluirCaixinha('${esc}', ${idx})" class="text-muted hover:text-red-500 p-1">
+                                    <i class="fa-solid fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="pt-2">
+                                <span class="text-xs text-muted block">Acumulado</span>
+                                <div class="flex items-baseline justify-between mt-0.5">
+                                    <span class="text-2xl font-extrabold font-mono text-emerald-500">R$ ${formatarMoedaBR(sld)}</span>
+                                    <span class="text-xs font-mono text-muted">Meta: R$ ${formatarMoedaBR(alv)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-muted">Progresso</span>
+                                <span class="font-bold text-[#D96234]">${pct.toFixed(1)}%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-input rounded-full overflow-hidden border">
+                                <div class="bg-[#D96234] h-full rounded-full" style="width: ${Math.min(100, pct)}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5 pt-1">
+                            <button onclick="abrirModalCaixinha('${esc}', 'aporte', ${alv}, '${cx.prazo}')" class="bg-[#333F2F] text-[#F6EFE4] font-bold text-xs py-2.5 rounded-xl cursor-pointer">
+                                <i class="fa-solid fa-plus"></i> Guardar
+                            </button>
+                            <button onclick="abrirModalCaixinha('${esc}', 'resgate', ${alv}, '${cx.prazo}')" class="bg-[#D96234]/15 text-[#D96234] font-bold text-xs py-2.5 rounded-xl cursor-pointer">
+                                <i class="fa-solid fa-minus"></i> Retirar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('caixinhasTotalAcumulado').innerText = 'R$ ' + formatarMoedaBR(somaSaldo);
+            document.getElementById('caixinhasTotalAlvo').innerText = 'R$ ' + formatarMoedaBR(somaAlvo);
+            document.getElementById('caixinhasQtdAtivas').innerText = String(caixinhas.length);
+        }
+
+        function abrirModalCaixinha(nome = '', op = 'aporte', alvo = '', prazo = '') {
+            document.getElementById('inputCaixinhaMeta').value = nome;
+            document.getElementById('selectCaixinhaOperacao').value = op;
+            document.getElementById('inputCaixinhaValor').value = '';
+            document.getElementById('inputCaixinhaAlvo').value = alvo || '';
+            document.getElementById('inputCaixinhaPrazo').value = prazo || 'Dez/2026';
+            const m = document.getElementById('modalCaixinha');
+            m.classList.remove('hidden'); m.classList.add('flex');
+        }
+
+        function fecharModalCaixinha() {
+            const m = document.getElementById('modalCaixinha');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
+
+        async function confirmarMovimentacaoCaixinha() {
+            const meta = document.getElementById('inputCaixinhaMeta').value.trim();
+            const op = document.getElementById('selectCaixinhaOperacao').value;
+            const val = parseFloat(document.getElementById('inputCaixinhaValor').value) || 0;
+            const alvo = parseFloat(document.getElementById('inputCaixinhaAlvo').value) || 1000;
+            const prazo = document.getElementById('inputCaixinhaPrazo').value.trim() || 'Dez/2026';
+
+            if (!meta) return;
+            const finalVal = op === 'resgate' ? -Math.abs(val) : Math.abs(val);
+
+            const ex = caixinhas.find(c => c.nome_meta.toLowerCase() === meta.toLowerCase());
+            if (ex) {
+                ex.saldo_atual = Math.max(0, (Number(ex.saldo_atual) || 0) + finalVal);
+                if (alvo > 0) ex.valor_alvo = alvo;
+                ex.prazo = prazo;
+            } else {
+                caixinhas.push({ nome_meta: meta, valor_alvo: alvo, saldo_atual: Math.max(0, finalVal), prazo });
+            }
+
+            salvarBancoLocal();
+            atualizarTudo();
+
+            await enviarPostServidor({
+                origem: 'frontend',
+                acao: 'nova_operacao',
+                dados: { acao: 'caixinha', valor: finalVal, valor_alvo: alvo, prazo, meta_destino: meta, descricao: (op === 'resgate' ? 'Resgate ' : 'Aporte ') + meta }
+            });
+
+            fecharModalCaixinha();
+        }
+
+        async function excluirCaixinha(meta, idx) {
+            caixinhas.splice(idx, 1);
+            salvarBancoLocal();
+            atualizarTudo();
+            await enviarPostServidor({ origem: 'frontend', acao: 'deletar_item', tipo_alvo: 'caixinha', id: meta });
+        }
+
+        // ============================================================================
+        // ABA CARTÕES
+        // ============================================================================
+        function renderCartoes(gastoTransacoes = 0) {
+            const painel = document.getElementById('cartoesPainelConsolidado');
+            const grid = document.getElementById('cartoesGrid');
+            if (!painel || !grid) return;
+
+            let limCredito = 0, gstCredito = 0, baseDebito = 0, gstDebito = 0;
+            let qtdCred = 0, qtdDeb = 0;
+
+            contasCartoes.forEach(c => {
+                const isDeb = String(c.tipo).toLowerCase().includes('debito');
+                const lim = Number(c.limite_total) || 0;
+                const sld = Number(c.saldo_atual) || 0;
+                if (isDeb) {
+                    qtdDeb++;
+                    baseDebito += lim > 0 ? lim : sld;
+                } else {
+                    qtdCred++;
+                    limCredito += lim;
+                }
+            });
+
+            gstCredito = gastoTransacoes;
+            const dispCredito = Math.max(0, limCredito - gstCredito);
+            const dispDebito = Math.max(0, baseDebito - gstDebito);
+
+            const elTotalCred = document.getElementById('homeTotalCredito');
+            if (elTotalCred) elTotalCred.innerText = 'R$ ' + formatarMoedaBR(gstCredito);
+            const elDispCred = document.getElementById('homeCreditoDisponivel');
+            if (elDispCred) elDispCred.innerText = 'R$ ' + formatarMoedaBR(dispCredito);
+
+            painel.innerHTML = `
+                <div class="physical-credit-card rounded-3xl p-6 sm:p-8 text-white flex flex-col justify-between min-h-[260px]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-white/70 block">CONSOLIDADO • ${qtdCred} CARTÕES DE CRÉDITO</span>
+                            <h3 class="text-xl font-extrabold mt-1">Soma Total — Crédito</h3>
+                        </div>
+                        <div class="w-11 h-8 rounded-md chip-metallic"></div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 my-4 pt-3 border-t border-white/15">
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Gasto Mês</span>
+                            <strong class="text-sm font-mono text-[#D96234] block mt-0.5">R$ ${formatarMoedaBR(gstCredito)}</strong>
+                        </div>
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Disponível</span>
+                            <strong class="text-sm font-mono text-emerald-400 block mt-0.5">R$ ${formatarMoedaBR(dispCredito)}</strong>
+                        </div>
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Limite Total</span>
+                            <strong class="text-sm font-mono text-white block mt-0.5">R$ ${formatarMoedaBR(limCredito)}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="physical-debit-card rounded-3xl p-6 sm:p-8 text-white flex flex-col justify-between min-h-[260px]">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-mono uppercase tracking-widest text-white/70 block">CONSOLIDADO • ${qtdDeb} CONTAS / DÉBITO</span>
+                            <h3 class="text-xl font-extrabold mt-1">Soma Total — Débito</h3>
+                        </div>
+                        <i class="fa-solid fa-building-columns text-2xl text-white/80"></i>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 my-4 pt-3 border-t border-white/15">
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Saldo Atual</span>
+                            <strong class="text-sm font-mono text-emerald-400 block mt-0.5">R$ ${formatarMoedaBR(dispDebito)}</strong>
+                        </div>
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Movimentado</span>
+                            <strong class="text-sm font-mono text-[#D96234] block mt-0.5">R$ ${formatarMoedaBR(gstDebito)}</strong>
+                        </div>
+                        <div class="bg-black/25 p-3 rounded-xl border border-white/10">
+                            <span class="text-[10px] uppercase text-white/70 block">Base Conta</span>
+                            <strong class="text-sm font-mono text-white block mt-0.5">R$ ${formatarMoedaBR(baseDebito)}</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            grid.innerHTML = '';
+            contasCartoes.forEach((c, idx) => {
+                const isDeb = String(c.tipo).toLowerCase().includes('debito');
+                grid.innerHTML += `
+                    <div class="bg-panel border rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded ${isDeb ? 'bg-[#333F2F] text-white' : 'bg-[#40628D] text-white'}">${isDeb ? 'Débito' : 'Crédito'}</span>
+                                <h4 class="text-base font-extrabold mt-1">${c.nome_conta}</h4>
+                            </div>
+                            <button onclick="removerCartaoIndividual('${c.nome_conta}', ${idx})" class="text-muted hover:text-red-500 p-1">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                        <div class="p-3 bg-input rounded-xl border text-xs font-mono flex justify-between">
+                            <span class="text-muted">${isDeb ? 'Saldo' : 'Limite'}:</span>
+                            <strong class="text-emerald-500">R$ ${formatarMoedaBR(c.limite_total)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function abrirModalLimite() {
+            document.getElementById('inputNomeCartao').value = '';
+            document.getElementById('inputNovoLimiteValor').value = '';
+            const m = document.getElementById('modalLimiteCartao');
+            m.classList.remove('hidden'); m.classList.add('flex');
+        }
+
+        function fecharModalLimite() {
+            const m = document.getElementById('modalLimiteCartao');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
+
+        async function confirmarNovoLimite() {
+            const nome = document.getElementById('inputNomeCartao').value.trim() || 'Cartão Principal';
+            const tipo = document.getElementById('selectTipoCartao').value;
+            const lim = parseFloat(document.getElementById('inputNovoLimiteValor').value) || 0;
+            const fech = document.getElementById('inputFechamentoCartao').value.trim() || 'Dia 10';
+
+            contasCartoes.push({ nome_conta: nome, tipo, limite_total: lim, saldo_atual: lim, fechamento: fech });
+            salvarBancoLocal();
+            atualizarTudo();
+
+            await enviarPostServidor({
+                origem: 'frontend',
+                acao: 'salvar_cartao',
+                nome_conta: nome,
+                tipo,
+                limite_total: lim,
+                fechamento: fech
+            });
+
+            fecharModalLimite();
+        }
+
+        async function removerCartaoIndividual(nome, idx) {
+            contasCartoes.splice(idx, 1);
+            salvarBancoLocal();
+            atualizarTudo();
+            await enviarPostServidor({ origem: 'frontend', acao: 'deletar_item', tipo_alvo: 'cartao', id: nome });
+        }
+
+        // ============================================================================
+        // ABA CALENDÁRIO
+        // ============================================================================
+        function extrairDiaCompromissoNoMes(comp, mesZeroIdx) {
+            const raw = String(comp.dia || '').trim();
+            const matchData = raw.match(/(\d{1,2})\/(\d{1,2})/);
+            if (matchData) {
+                const d = parseInt(matchData[1], 10);
+                const m = parseInt(matchData[2], 10) - 1;
+                const ehRecorrente = Boolean(comp.assinatura) || String(comp.frequencia || '').toLowerCase().includes('assinatura') || String(comp.frequencia || '').toLowerCase().includes('mensal');
+                if (ehRecorrente || m === mesZeroIdx) return d;
+                return null;
+            }
+            const matchDia = raw.match(/(\d{1,2})/);
+            return matchDia ? parseInt(matchDia[1], 10) : null;
+        }
+
+        function renderCalendario() {
+            const mesesNomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const labelMes = document.getElementById('calMesAnoLabel');
+            if (labelMes) labelMes.innerText = mesesNomes[calMesAtual] + ' ' + calAnoAtual;
+
+            const grid = document.getElementById('calendarVisualGrid');
+            const list = document.getElementById('calendarioList');
+            if (!grid || !list) return;
+
+            grid.innerHTML = '';
+            list.innerHTML = '';
+
+            const primeiroDia = new Date(calAnoAtual, calMesAtual, 1).getDay();
+            const totalDias = new Date(calAnoAtual, calMesAtual + 1, 0).getDate();
+            const hoje = new Date();
+
+            for (let i = 0; i < primeiroDia; i++) grid.innerHTML += '<div class="h-14 rounded-xl bg-input/40"></div>';
+
+            for (let d = 1; d <= totalDias; d++) {
+                const ehHoje = d === hoje.getDate() && calMesAtual === hoje.getMonth() && calAnoAtual === hoje.getFullYear();
+                const itensDoDia = compromissos.filter(c => extrairDiaCompromissoNoMes(c, calMesAtual) === d);
+                const temAssinatura = itensDoDia.some(c => Boolean(c.assinatura) || String(c.frequencia || '').toLowerCase().includes('assinatura'));
+                const temBoleto = itensDoDia.some(c => !(Boolean(c.assinatura) || String(c.frequencia || '').toLowerCase().includes('assinatura')));
+
+                let badgesHtml = '';
+                if (itensDoDia.length > 0) {
+                    badgesHtml = '<div class="flex items-center gap-1 flex-wrap">';
+                    if (temAssinatura) badgesHtml += '<span class="w-2 h-2 rounded-full bg-[#706194]" title="Assinatura Recorrente"></span>';
+                    if (temBoleto) badgesHtml += '<span class="w-2 h-2 rounded-full bg-[#D96234]" title="Boleto / Conta"></span>';
+                    badgesHtml += '<span class="text-[9px] font-mono truncate max-w-full text-muted">' + itensDoDia[0].desc + '</span></div>';
+                }
+
+                grid.innerHTML += `
+                    <div class="h-14 rounded-xl border p-1.5 flex flex-col justify-between ${ehHoje ? 'border-[#706194] bg-[#706194]/15 font-bold' : (itensDoDia.length > 0 ? 'border-[#D96234]/50 bg-input' : 'bg-input border-subtle')}">
+                        <span class="text-xs font-mono">${String(d).padStart(2, '0')}</span>
+                        ${badgesHtml}
+                    </div>
+                `;
+            }
+
+            compromissos.forEach((c, idx) => {
+                const ehAssinatura = Boolean(c.assinatura) || String(c.frequencia || '').toLowerCase().includes('assinatura');
+                list.innerHTML += `
+                    <div class="flex items-center justify-between bg-input p-3 rounded-xl border text-xs ${ehAssinatura ? 'border-[#706194]/40' : ''}">
+                        <div class="min-w-0 pr-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-bold block truncate">${c.desc}</span>
+                                ${ehAssinatura ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#706194]/20 text-[#706194] shrink-0">Assinatura</span>' : ''}
+                            </div>
+                            <span class="text-[11px] ${ehAssinatura ? 'text-[#706194]' : 'text-[#D96234]'} font-mono">Vence: ${c.dia} (${ehAssinatura ? 'Assinatura Recorrente' : c.frequencia})</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="font-mono font-bold">R$ ${formatarMoedaBR(c.valor)}</span>
+                            <button onclick="removerCompromisso(${idx})" class="text-muted hover:text-red-500 p-1 cursor-pointer">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function mudarMesCalendario(delta) {
+            calMesAtual += delta;
+            if (calMesAtual > 11) { calMesAtual = 0; calAnoAtual++; }
+            else if (calMesAtual < 0) { calMesAtual = 11; calAnoAtual--; }
+            renderCalendario();
+        }
+
+        async function adicionarCompromisso() {
+            const desc = document.getElementById('calcDesc').value.trim();
+            const val = parseFloat(document.getElementById('calcValor').value) || 0;
+            const dia = document.getElementById('calcDia').value.trim() || 'Dia 10';
+            const freqSelect = document.getElementById('calcFreq').value;
+            const chkAssinatura = document.getElementById('calcAssinatura');
+            const ehAssinatura = chkAssinatura ? chkAssinatura.checked : false;
+            const freq = ehAssinatura ? 'Assinatura Recorrente' : freqSelect;
+            if (!desc || val <= 0) return;
+
+            compromissos.push({ desc, valor: val, dia, frequencia: freq, assinatura: ehAssinatura });
+            salvarBancoLocal();
+            renderCalendario();
+            detectarAssinaturasZumbis();
+
+            await enviarPostServidor({
+                origem: 'frontend',
+                acao: 'nova_operacao',
+                dados: { acao: 'recorrente', descricao: desc, valor: val, dia_vencimento: dia, frequencia: freq, assinatura: ehAssinatura }
+            });
+            document.getElementById('calcDesc').value = '';
+            document.getElementById('calcValor').value = '';
+            if (chkAssinatura) chkAssinatura.checked = false;
+        }
+
+        function removerCompromisso(idx) {
+            compromissos.splice(idx, 1);
+            salvarBancoLocal();
+            renderCalendario();
+            detectarAssinaturasZumbis();
+        }
+
+        // ============================================================================
+        // ABA PREVISÕES (CHATBOT FIN IA)
+        // ============================================================================
+        function adicionarBalaoChat(texto, remetente = 'ia') {
+            const c = document.getElementById('chatMessagesContainer');
+            if (!c) return;
+            const w = document.createElement('div');
+            w.className = remetente === 'user' ? 'flex justify-end' : 'flex justify-start';
+            const b = document.createElement('div');
+            b.className = remetente === 'user' ? 'max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3 bg-[#D96234] text-white text-xs leading-relaxed' : 'max-w-[80%] rounded-2xl rounded-tl-sm px-4 py-3 bg-[#706194] text-white text-xs leading-relaxed whitespace-pre-wrap';
+            b.innerText = texto;
+            w.appendChild(b); c.appendChild(w);
+            c.scrollTop = c.scrollHeight;
+        }
+
+        function gerarDiagnosticoRapidoChat() {
+            document.getElementById('inputPerguntaIA').value = 'Faça um diagnóstico completo do meu Burn Rate e das minhas finanças neste mês.';
+            enviarMensagemChatIA();
+        }
+
+        async function enviarMensagemChatIA() {
+            const inp = document.getElementById('inputPerguntaIA');
+            const txt = inp.value.trim();
+            if (!txt) return;
+            adicionarBalaoChat(txt, 'user');
+            inp.value = '';
+
+            const apiKey = (document.getElementById('configApiKey').value || localStorage.getItem('argos_gemini_key') || '').trim();
+            if (apiKey) {
+                try {
+                    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+                    const prompt = 'Você é o Fin IA do Fin Ops. Responda em português direto e amigável: ' + txt + ' Dados atuais: Transações: ' + transacoes.length + ', Caixinhas: ' + caixinhas.length;
+                    const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                    if (resp.ok) {
+                        const d = await resp.json();
+                        adicionarBalaoChat(d.candidates[0].content.parts[0].text, 'ia');
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            adicionarBalaoChat('📊 Diagnóstico Fin Ops: Seu fluxo financeiro está registrado com ' + transacoes.length + ' lançamentos neste período. Acesse o comando /burnrate no bot para limites diários!', 'ia');
+        }
+
+        // ============================================================================
+        // MODAL DE LANÇAMENTO IA (VOZ + FOTO + PDF + TEXTO)
+        // ============================================================================
+        function abrirModalRegistro(tipoForcado = '') {
+            const m = document.getElementById('modalRegistro');
+            m.classList.remove('hidden'); m.classList.add('flex');
+            window.tipoForcadoTemp = tipoForcado;
+        }
+
+        function fecharModalRegistro() {
+            const m = document.getElementById('modalRegistro');
+            m.classList.add('hidden'); m.classList.remove('flex');
+            document.getElementById('modalPromptInput').value = '';
+            modalFileBase64 = null;
+            audioGravadoBase64 = null;
+            document.getElementById('modalFileIndicator').classList.add('hidden');
+            document.getElementById('badgeAudioPronto').classList.add('hidden');
+        }
+
+        async function processarRegistroIA() {
+            const texto = document.getElementById('modalPromptInput').value.trim();
+            const btn = document.getElementById('btnModalProcessar');
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Processando com Gemini...';
+            btn.disabled = true;
+
+            const apiKey = (document.getElementById('configApiKey').value || localStorage.getItem('argos_gemini_key') || '').trim();
+            const dataHojeBR = new Date().toLocaleDateString('pt-BR');
+
+            try {
+                // 1. Se tiver chave Gemini configurada no navegador e houver foto, áudio ou texto
+                if (apiKey && (modalFileBase64 || audioGravadoBase64 || texto)) {
+                    const instrucaoPrioritariaNota = modalFileBase64
+                        ? 'INSTRUÇÃO PRIORITÁRIA PARA FOTO DE CUPOM FISCAL / NOTA: Há uma imagem anexada. Mesmo que o usuário NÃO tenha digitado nenhum texto, leia diretamente a imagem da nota fiscal/cupom e extraia obrigatoriamente: 1. Valor Total pago (campo "valor" numérico), 2. Data da emissão/compra em DD/MM/AAAA (campo "data", ou use ' + dataHojeBR + ' se ilegível), 3. Nome do Estabelecimento/Loja ou resumo principal da compra (campo "descricao"), e classifique na categoria oficial mais adequada (campo "categoria"). '
+                        : '';
+                    const prompt = instrucaoPrioritariaNota +
+                        'Extraia os dados financeiros e retorne ESTRITAMENTE em formato JSON puro. ' +
+                        'Categorias de Receita: Sustento e Ofertas, Salário e Serviços, Doações e Presentes, Rendimentos, Reembolsos. ' +
+                        'Categorias de Despesa: Moradia, Alimentação, Lazer e Restaurantes, Transporte, Saúde, Educação, Ministério e Doações, Cuidados Pessoais, Imprevistos e Taxas. ' +
+                        'Se for fatura de cartão com múltiplos itens, retorne {"acao":"fatura_lote","transacoes":[{"data":"DD/MM/AAAA","categoria":"...","descricao":"...","valor":0.00,"metodo":"Cartão de Crédito"}]}. ' +
+                        'Para cupom fiscal, nota, áudio ou texto de lançamento único, retorne: {"acao":"despesa"|"receita","data":"DD/MM/AAAA","categoria":"...","descricao":"Estabelecimento / Item","valor":0.00,"metodo":"PIX|Cartão de Crédito|Cartão de Débito"}.';
+
+                    const textoContexto = texto
+                        ? 'Texto do usuário: "' + texto + '"'
+                        : 'Nenhum texto digitado. Extraia todos os dados diretamente da imagem do cupom fiscal/nota ou áudio anexado.';
+
+                    const parts = [{ text: prompt + '\n' + textoContexto }];
+
+                    if (audioGravadoBase64) {
+                        parts.push({ inlineData: { mimeType: 'audio/webm', data: audioGravadoBase64 } });
+                    } else if (modalFileBase64) {
+                        parts.push({ inlineData: { mimeType: modalFileMime || 'image/jpeg', data: modalFileBase64 } });
+                    }
+
+                    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.1 } })
+                    });
+
+                    if (resp.ok) {
+                        const resData = await resp.json();
+                        const rawTxt = resData?.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+                        const iniJson = rawTxt.indexOf('{');
+                        const fimJson = rawTxt.lastIndexOf('}');
+                        const limpo = (iniJson !== -1 && fimJson > iniJson) ? rawTxt.substring(iniJson, fimJson + 1) : rawTxt.trim();
+                        const obj = JSON.parse(limpo);
+
+                        if (obj.acao === 'fatura_lote' && Array.isArray(obj.transacoes)) {
+                            for (let i = 0; i < obj.transacoes.length; i++) {
+                                const tx = obj.transacoes[i];
+                                const novaTx = {
+                                    id: 'FAT-' + Date.now() + '-' + i,
+                                    data: tx.data || dataHojeBR,
+                                    tipo: 'Despesa',
+                                    categoria: tx.categoria || 'Alimentação',
+                                    descricao: tx.descricao || 'Item Fatura',
+                                    valor: parseFloat(tx.valor) || 0,
+                                    pagamento: tx.metodo || 'Cartão de Crédito',
+                                    status: 'Confirmado',
+                                    membro: 'Principal'
+                                };
+                                transacoes.unshift(novaTx);
+                                if (estaEmModoNuvem()) {
+                                    await enviarPostServidor({
+                                        origem: 'frontend',
+                                        acao: 'nova_operacao',
+                                        dados: {
+                                            acao: 'despesa',
+                                            data: novaTx.data,
+                                            categoria: novaTx.categoria,
+                                            descricao: novaTx.descricao,
+                                            valor: novaTx.valor,
+                                            metodo: novaTx.pagamento
+                                        }
+                                    });
+                                }
+                            }
+                        } else {
+                            const ehRec = obj.acao === 'receita' || window.tipoForcadoTemp === 'Receita';
+                            const novaTx = {
+                                id: 'TX-' + Date.now(),
+                                data: obj.data || dataHojeBR,
+                                tipo: ehRec ? 'Receita' : 'Despesa',
+                                categoria: obj.categoria || (ehRec ? 'Salário e Serviços' : 'Alimentação'),
+                                descricao: obj.descricao || 'Cupom Fiscal / Lançamento',
+                                valor: parseFloat(obj.valor) || 0,
+                                pagamento: obj.metodo || 'PIX',
+                                status: 'Confirmado',
+                                membro: 'Principal'
+                            };
+                            transacoes.unshift(novaTx);
+                            if (estaEmModoNuvem()) {
+                                await enviarPostServidor({
+                                    origem: 'frontend',
+                                    acao: 'nova_operacao',
+                                    dados: {
+                                        acao: ehRec ? 'receita' : 'despesa',
+                                        data: novaTx.data,
+                                        categoria: novaTx.categoria,
+                                        descricao: novaTx.descricao,
+                                        valor: novaTx.valor,
+                                        metodo: novaTx.pagamento
+                                    }
+                                });
+                            }
+                        }
+
+                        salvarBancoLocal();
+                        atualizarTudo();
+                        fecharModalRegistro();
+                        return;
+                    }
+                }
+
+                // 2. Se estiver em Modo Nuvem (Apps Script com chamarGemini configurado lá), envia texto + foto/áudio
+                if (estaEmModoNuvem() && (modalFileBase64 || audioGravadoBase64 || texto)) {
+                    let anexoPayload = null;
+                    if (audioGravadoBase64) {
+                        anexoPayload = { mimeType: 'audio/webm', base64: audioGravadoBase64 };
+                    } else if (modalFileBase64) {
+                        anexoPayload = { mimeType: modalFileMime || 'image/jpeg', base64: modalFileBase64 };
+                    }
+
+                    await enviarPostServidor({
+                        origem: 'frontend',
+                        acao: 'processar_ia',
+                        texto: texto,
+                        anexo: anexoPayload
+                    });
+                    await carregarDadosServidor();
+                    fecharModalRegistro();
+                    return;
+                }
+
+                // 3. Fallback Determinístico Local
+                const matchVal = texto.match(/(\d+(?:[.,]\d{1,2})?)/);
+                const val = matchVal ? parsearValorBR(matchVal[1]) : 0;
+                const ehReceita = window.tipoForcadoTemp === 'Receita' || /\b(recebi|salario|oferta|rendimento)\b/i.test(texto);
+
+                if (val > 0) {
+                    transacoes.unshift({
+                        id: 'TX-' + Date.now(),
+                        data: dataHojeBR,
+                        tipo: ehReceita ? 'Receita' : 'Despesa',
+                        categoria: ehReceita ? 'Salário e Serviços' : 'Alimentação',
+                        descricao: texto.replace(/(\d+(?:[.,]\d{1,2})?)/, '').trim() || 'Lançamento',
+                        valor: val,
+                        pagamento: /debito/i.test(texto) ? 'Cartão de Débito' : (/cartao|credito/i.test(texto) ? 'Cartão de Crédito' : 'PIX'),
+                        status: 'Confirmado',
+                        membro: 'Principal'
+                    });
+                    salvarBancoLocal();
+                    atualizarTudo();
+                }
+
+                fecharModalRegistro();
+            } catch (e) {
+                console.error(e);
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Processar e Sincronizar';
+                btn.disabled = false;
+            }
+        }
+
+        async function removerTransacaoServidor(id, idx) {
+            transacoes.splice(idx, 1);
+            salvarBancoLocal();
+            atualizarTudo();
+            if (estaEmModoNuvem()) {
+                await enviarPostServidor({ origem: 'frontend', acao: 'deletar_item', id });
+            }
+        }
+
+        // ============================================================================
+        // COFRE DE SEGURANÇA E TEMA
+        // ============================================================================
+        function atualizarBadgeSeguranca() {
+            const nome = localStorage.getItem('argos_user_name') || 'Investidor(a)';
+            const h = document.getElementById('headerUserName');
+            if (h) h.innerText = nome;
+            const b = document.getElementById('badgeModoTexto');
+            if (b) b.innerText = estaEmModoNuvem() ? 'Planilha Privada' : 'Cofre Local Isolado';
+        }
+
+        function selecionarModoCofreModal(m) {
+            modoCofreModal = m;
+            const btnLoc = document.getElementById('tabCofreLocalBtn');
+            const btnNuv = document.getElementById('tabCofreNuvemBtn');
+            const bNuv = document.getElementById('blocoCofreNuvem');
+            const bLoc = document.getElementById('blocoCofreLocalInfo');
+            if (m === 'nuvem') {
+                btnNuv.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-[#D96234] text-white';
+                btnLoc.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-muted';
+                bNuv.classList.remove('hidden'); bLoc.classList.add('hidden');
+            } else {
+                btnLoc.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-[#D96234] text-white';
+                btnNuv.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-muted';
+                bNuv.classList.add('hidden'); bLoc.classList.remove('hidden');
+            }
+        }
+
+        function abrirModalCofreSeguranca() {
+            const m = document.getElementById('modalCofreSeguranca');
+            m.classList.remove('hidden'); m.classList.add('flex');
+            document.getElementById('cofreInputNome').value = localStorage.getItem('argos_user_name') || '';
+            document.getElementById('cofreInputUrl').value = localStorage.getItem('argos_webapp_url') || '';
+            document.getElementById('cofreInputGemini').value = localStorage.getItem('argos_gemini_key') || '';
+            document.getElementById('cofreInputPin').value = localStorage.getItem('argos_vault_pin') || '';
+            selecionarModoCofreModal(estaEmModoNuvem() ? 'nuvem' : 'local');
+        }
+
+        function fecharModalCofreSeguranca() {
+            const m = document.getElementById('modalCofreSeguranca');
+            m.classList.add('hidden'); m.classList.remove('flex');
+        }
+
+        function confirmarAcessoCofre() {
+            const nome = document.getElementById('cofreInputNome').value.trim() || 'Investidor(a)';
+            const url = modoCofreModal === 'nuvem' ? document.getElementById('cofreInputUrl').value.trim() : '';
+            const gem = document.getElementById('cofreInputGemini').value.trim();
+            const pin = document.getElementById('cofreInputPin').value.trim();
+
+            localStorage.setItem('argos_vault_v2_confirmed', 'true');
+            localStorage.setItem('argos_user_name', nome);
+            localStorage.setItem('argos_webapp_url', url);
+            if (gem) localStorage.setItem('argos_gemini_key', gem);
+            if (pin) localStorage.setItem('argos_vault_pin', pin);
+            else localStorage.removeItem('argos_vault_pin');
+            sessionStorage.setItem('argos_pin_unlocked', 'true');
+
+            fecharModalCofreSeguranca();
+            carregarDadosServidor();
+        }
+
+        function validarPinDesbloqueio() {
+            const dig = document.getElementById('inputUnlockPin').value.trim();
+            const pin = localStorage.getItem('argos_vault_pin') || '';
+            if (dig === pin) {
+                sessionStorage.setItem('argos_pin_unlocked', 'true');
+                const m = document.getElementById('modalDesbloqueioPin');
+                m.classList.add('hidden'); m.classList.remove('flex');
+                carregarDadosServidor();
+            } else {
+                document.getElementById('erroUnlockPin').classList.remove('hidden');
+            }
+        }
+
+        function desconectarCofreAtual() {
+            localStorage.removeItem('argos_vault_v2_confirmed');
+            localStorage.removeItem('argos_webapp_url');
+            localStorage.removeItem('argos_vault_pin');
+            transacoes = []; contasCartoes = []; caixinhas = []; compromissos = []; garantias = [];
+            atualizarTudo();
+            abrirModalCofreSeguranca();
+        }
+
+        function mudarTema(t) {
+            temaAtual = t;
+            localStorage.setItem('argos_tema', t);
+            document.body.className = t === 'dark' ? 'dark-mode min-h-screen flex flex-col md:flex-row transition-colors duration-300 pb-28 md:pb-0' : 'light-mode min-h-screen flex flex-col md:flex-row transition-colors duration-300 pb-28 md:pb-0';
+            atualizarTudo();
+        }
+
+        function alternarTemaMobile() {
+            mudarTema(temaAtual === 'dark' ? 'light' : 'dark');
+        }
+
+        function mudarAba(aba) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('tab-' + aba);
+            if (target) target.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('bg-[#D96234]/15', 'text-[#D96234]'));
+            document.querySelectorAll('[data-tab="' + aba + '"]').forEach(b => b.classList.add('bg-[#D96234]/15', 'text-[#D96234]'));
+            if (aba === 'relatorios') atualizarRelatorios();
+            if (aba === 'calendario') renderCalendario();
+            if (aba === 'garantias') renderGarantias();
+            if (aba === 'config') {
+                const elMeta = document.getElementById('configMetaMensal');
+                if (elMeta) elMeta.value = localStorage.getItem('argos_meta_mensal') || localStorage.getItem('finops_meta_mensal') || '';
+                const elNome = document.getElementById('configUserName');
+                if (elNome) elNome.value = localStorage.getItem('argos_user_name') || '';
+                const elUrl = document.getElementById('configWebAppUrl');
+                if (elUrl) elUrl.value = localStorage.getItem('argos_webapp_url') || '';
+                const elKey = document.getElementById('configApiKey');
+                if (elKey) elKey.value = localStorage.getItem('argos_gemini_key') || '';
+            }
+        }
+
+        function salvarConfiguracoes() {
+            const nome = document.getElementById('configUserName').value.trim();
+            const url = document.getElementById('configWebAppUrl').value.trim();
+            const key = document.getElementById('configApiKey').value.trim();
+            const pin = document.getElementById('configVaultPin').value.trim();
+            const metaEl = document.getElementById('configMetaMensal');
+            const metaVal = metaEl ? (parseFloat(metaEl.value) || 0) : 0;
+
+            if (nome) localStorage.setItem('argos_user_name', nome);
+            localStorage.setItem('argos_webapp_url', url);
+            localStorage.setItem('argos_gemini_key', key);
+            localStorage.setItem('argos_meta_mensal', String(metaVal));
+            localStorage.setItem('finops_meta_mensal', String(metaVal));
+            if (pin) localStorage.setItem('argos_vault_pin', pin);
+            carregarDadosServidor();
+        }
+
+        function obterCorTextoGrafico() { return temaAtual === 'dark' ? '#F6EFE4' : '#1E1E1E'; }
+        function obterCorGradeGrafico() { return temaAtual === 'dark' ? 'rgba(246, 239, 228, 0.08)' : 'rgba(30, 30, 30, 0.08)'; }
+
+        function renderHomeChart(cats) {
+            const ctx = document.getElementById('homeCategoryChart');
+            if (!ctx) return;
+            if (homeChartInstance) homeChartInstance.destroy();
+            const labels = Object.keys(cats);
+            const values = Object.values(cats);
+            homeChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels.length ? labels : ['Sem Despesas'],
+                    datasets: [{
+                        data: values.length ? values : [1],
+                        backgroundColor: ['#D96234', '#333F2F', '#706194', '#40628D', '#10b981', '#f59e0b', '#ec4899', '#6366f1', '#14b8a6'],
+                        borderWidth: 0,
+                        hoverBorderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: { legend: { position: 'bottom', labels: { color: obterCorTextoGrafico(), font: { size: 10 } } } }
+                }
+            });
+        }
+
+        function atualizarRelatorios() {
+            const mesSel = document.getElementById('selectMes').value;
+            const anoSel = document.getElementById('selectAno').value;
+            let gastoMes = 0, entradaMes = 0, gastoAno = 0;
+            const gastosPorMes = new Array(12).fill(0);
+            const catsMes = {};
+
+            transacoes.forEach(t => {
+                const p = String(t.data || '').split('/');
+                if (p.length !== 3) return;
+                const m = p[1], a = p[2], val = Number(t.valor) || 0;
+                if (a === anoSel) {
+                    if (t.tipo === 'Despesa') {
+                        gastoAno += val;
+                        const idx = parseInt(m, 10) - 1;
+                        if (idx >= 0 && idx < 12) gastosPorMes[idx] += val;
+                    }
+                    if (m === mesSel) {
+                        if (t.tipo === 'Despesa') {
+                            gastoMes += val;
+                            catsMes[t.categoria || 'Alimentação'] = (catsMes[t.categoria || 'Alimentação'] || 0) + val;
+                        } else entradaMes += val;
+                    }
+                }
+            });
+
+            document.getElementById('relGastoMes').innerText = 'R$ ' + formatarMoedaBR(gastoMes);
+            document.getElementById('relGastoAno').innerText = 'R$ ' + formatarMoedaBR(gastoAno);
+            document.getElementById('relBalancoMes').innerText = 'R$ ' + formatarMoedaBR(entradaMes - gastoMes);
+
+            const ctxAno = document.getElementById('anoBarChart');
+            if (ctxAno) {
+                if (anoChartInstance) anoChartInstance.destroy();
+                anoChartInstance = new Chart(ctxAno.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        datasets: [{ label: 'Saídas (R$)', data: gastosPorMes, backgroundColor: '#D96234', borderRadius: 6 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            const ctxMes = document.getElementById('mesDoughnutChart');
+            if (ctxMes) {
+                if (mesChartInstance) mesChartInstance.destroy();
+                const lbs = Object.keys(catsMes);
+                mesChartInstance = new Chart(ctxMes.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: lbs.length ? lbs : ['Sem dados'],
+                        datasets: [{
+                            data: lbs.length ? Object.values(catsMes) : [1],
+                            backgroundColor: ['#D96234', '#333F2F', '#706194', '#40628D', '#10b981', '#f59e0b', '#ec4899', '#6366f1', '#14b8a6'],
+                            borderWidth: 0,
+                            hoverBorderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: { legend: { position: 'bottom', labels: { color: obterCorTextoGrafico(), font: { size: 10 } } } }
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const h = new Date();
+            document.getElementById('selectMes').value = String(h.getMonth() + 1).padStart(2, '0');
+            document.getElementById('selectAno').value = String(h.getFullYear());
+            const elMeta = document.getElementById('configMetaMensal');
+            if (elMeta) elMeta.value = localStorage.getItem('argos_meta_mensal') || localStorage.getItem('finops_meta_mensal') || '';
+            mudarTema(temaAtual);
+
+            const conf = localStorage.getItem('argos_vault_v2_confirmed') === 'true';
+            const pin = localStorage.getItem('argos_vault_pin') || '';
+            const unl = sessionStorage.getItem('argos_pin_unlocked') === 'true';
+
+            if (!conf) abrirModalCofreSeguranca();
+            else if (pin && !unl) {
+                const m = document.getElementById('modalDesbloqueioPin');
+                m.classList.remove('hidden'); m.classList.add('flex');
+            } else carregarDadosServidor();
+        });
+    </script>
+</body>
+</html>
